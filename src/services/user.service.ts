@@ -21,6 +21,11 @@ const login = (email: string, password: string) => {
     });
 };
 
+const logout = () => {
+  // remove user from local storage to log user out
+  localStorage.removeItem('user');
+};
+
 export const userService = {
   login,
   logout,
@@ -30,11 +35,6 @@ export const userService = {
   update,
   delete: delete_user
 };
-
-function logout() {
-  // remove user from local storage to log user out
-  localStorage.removeItem('user');
-}
 
 function getAll() {
   const requestOptions = {

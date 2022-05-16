@@ -57,10 +57,10 @@ export const login =
     // );
   };
 
-// function logout() {
-//   userService.logout();
-//   return { type: userConstants.LOGOUT };
-// }
+export const logout = () => {
+  userService.logout();
+  return { type: userConstants.LOGOUT };
+};
 
 // function register(user: any) {
 //   return (dispatch: any) => {

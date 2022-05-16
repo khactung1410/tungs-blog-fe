@@ -3,7 +3,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  Link,
+  unstable_HistoryRouter as HistoryBrowerRouter
+} from 'react-router-dom';
 import styled from 'styled-components';
 import './App.css';
 import HomePage from './components/HomePage';
@@ -30,15 +36,20 @@ const App: React.FC = () => {
     });
   }, []);
 
+  const onLogout = () => {
+    dispatch(logout());
+    history.push('./');
+  };
+
   return (
     <>
       {alert.message && <div className={`alert ${alert.type}`}>{alert.message}</div>}
-      <BrowserRouter>
+      <HistoryBrowerRouter history={history}>
         <nav>
           <Link to="/"> Home </Link>
           <Link to="/login"> Sign in </Link>
           <Link to="/register"> Sign up </Link>
-          <Link to="/" onClick={() => dispatch(logout())}>
+          <Link to="/" onClick={() => onLogout()}>
             Log out
           </Link>
         </nav>
@@ -56,7 +67,7 @@ const App: React.FC = () => {
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
+      </HistoryBrowerRouter>
     </>
   );
 };

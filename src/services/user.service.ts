@@ -4,11 +4,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { authHeader } from '../helpers';
 
-const login = (email: string, password: string) => {
+const login = (userName: string, password: string) => {
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ userName, password })
   };
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/sessions`, requestOptions)
@@ -21,6 +21,16 @@ const login = (email: string, password: string) => {
     });
 };
 
+const signup = (user: any) => {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user)
+  };
+
+  return fetch(`${process.env.REACT_APP_API_URL}/api/users`, requestOptions).then(handleResponse);
+};
+
 const logout = () => {
   // remove user from local storage to log user out
   localStorage.removeItem('user');
@@ -29,7 +39,7 @@ const logout = () => {
 export const userService = {
   login,
   logout,
-  register,
+  signup,
   getAll,
   getById,
   update,
@@ -52,16 +62,6 @@ function getById(id: any) {
   };
 
   return fetch(`${process.env.API_URL}/users/${id}`, requestOptions).then(handleResponse);
-}
-
-function register(user: any) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(user)
-  };
-
-  return fetch(`${process.env.API_URL}/users/register`, requestOptions).then(handleResponse);
 }
 
 function update(user: any) {

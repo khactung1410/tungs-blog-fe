@@ -8,11 +8,11 @@ import { userActions } from '../../redux/actions';
 
 const LoginPage: React.FC = () => {
   const [inputs, setInputs] = useState({
-    username: '',
+    userName: '',
     password: ''
   });
   const [submitted, setSubmitted] = useState(false);
-  const { username, password } = inputs;
+  const { userName, password } = inputs;
   const loggingIn = useAppSelector((state: any) => state.authentication.loggingIn);
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -30,10 +30,10 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    if (username && password) {
+    if (userName && password) {
       // get return url from location state or default to home page
       const { from }: any = location.state || { from: { pathname: '/' } };
-      dispatch(userActions.login(username, password, from));
+      dispatch(userActions.login(userName, password, from));
     }
   };
 
@@ -42,15 +42,15 @@ const LoginPage: React.FC = () => {
       <h2>Login</h2>
       <form name="form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Username</label>
+          <label>User Name</label>
           <input
             type="text"
-            name="username"
-            value={username}
+            name="userName"
+            value={userName}
             onChange={handleChange}
-            className={`form-control${submitted && !username ? ' is-invalid' : ''}`}
+            className={`form-control${submitted && !userName ? ' is-invalid' : ''}`}
           />
-          {submitted && !username && <div className="invalid-feedback">Username is required</div>}
+          {submitted && !userName && <div className="invalid-feedback">userName is required</div>}
         </div>
         <div className="form-group">
           <label>Password</label>
@@ -68,8 +68,8 @@ const LoginPage: React.FC = () => {
             {loggingIn && <span className="spinner-border spinner-border-sm mr-1" />}
             Login
           </button>
-          <Link to="/register" className="btn btn-link">
-            Register
+          <Link to="/signup" className="btn btn-link">
+            SignUp
           </Link>
         </div>
       </form>

@@ -12,7 +12,7 @@ import { notificationActions } from './notification.actions';
 
 const login =
   (
-    username: string,
+    userName: string,
     password: string,
     from: string
   ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> =>
@@ -28,8 +28,8 @@ const login =
     };
 
     try {
-      dispatch(request({ username }));
-      const response = await userService.login(username, password);
+      dispatch(request({ userName }));
+      const response = await userService.login(userName, password);
       dispatch(success(response)); // pass user data to reducer in the payload of the dispatch
       history.push(from);
       dispatch(notificationActions.addNotification('Login Successfully!', 'SUCCESS'));
@@ -43,53 +43,40 @@ const login =
       );
       dispatch(notificationActions.addNotification(error.toString(), 'DANGER'));
     }
-
-    // dispatch(request({ username }));
-
-    // userService.login(username, password).then(
-    //   (user: any) => {
-    //     dispatch(success(user));
-    //     history.push(from);
-    //   },
-    //   (error: any) => {
-    //     dispatch(failure(error.toString()));
-    //     dispatch(alertActions.error(error.toString()));
-    //   }
-    // );
   };
 
-export const logout = () => {
+const signup = (user: any) => {
+  return (dispatch: any) => {
+    dispatch(request(user));
+
+    userService.signup(user).then(
+      (user: any) => {
+        dispatch(success(user));
+        history.push('/login');
+        dispatch(notificationActions.addNotification('Sign Up Successfully!', 'SUCCESS'));
+      },
+      (error: any) => {
+        dispatch(failure(error.toString()));
+        dispatch(notificationActions.addNotification(error.toString(), 'DANGER'));
+      }
+    );
+  };
+
+  function request(user: any) {
+    return { type: userConstants.SIGNUP_REQUEST, user };
+  }
+  function success(user: any) {
+    return { type: userConstants.SIGNUP_SUCCESS, user };
+  }
+  function failure(error: any) {
+    return { type: userConstants.SIGNUP_FAILURE, error };
+  }
+};
+
+const logout = () => {
   userService.logout();
   return { type: userConstants.LOGOUT };
 };
-
-// function register(user: any) {
-//   return (dispatch: any) => {
-//     dispatch(request(user));
-
-//     userService.register(user).then(
-//       (user: any) => {
-//         dispatch(success(user));
-//         history.push('/login');
-//         dispatch(alertActions.success('Registration successful'));
-//       },
-//       (error: any) => {
-//         dispatch(failure(error.toString()));
-//         dispatch(alertActions.error(error.toString()));
-//       }
-//     );
-//   };
-
-//   function request(user: any) {
-//     return { type: userConstants.REGISTER_REQUEST, user };
-//   }
-//   function success(user: any) {
-//     return { type: userConstants.REGISTER_SUCCESS, user };
-//   }
-//   function failure(error: any) {
-//     return { type: userConstants.REGISTER_FAILURE, error };
-//   }
-// }
 
 // function getAll() {
 //   return (dispatch: any) => {
@@ -135,5 +122,7 @@ export const logout = () => {
 // }
 
 export const userActions = {
-  login
+  login,
+  logout,
+  signup
 };

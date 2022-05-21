@@ -6,7 +6,7 @@ export interface AuthenticationState {
   loggedIn?: boolean;
   error?: string;
   userInfo: {
-    username?: string;
+    userName?: string;
   };
 }
 

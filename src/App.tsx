@@ -14,9 +14,9 @@ import styled from 'styled-components';
 import './App.css';
 import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
-import RegisterPage from './components/RegisterPage';
+import SignupPage from './components/SignupPage';
 import { history, ProtectedRoute } from './helpers';
-import { logout } from './redux/actions';
+import { userActions } from './redux/actions';
 import Post from './components/Post/Post';
 import { useAppDispatch } from './hooks';
 import NotificationContainer from './components/Notification/NotificationContainer';
@@ -30,7 +30,7 @@ const App: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const onLogout = () => {
-    dispatch(logout());
+    dispatch(userActions.logout());
     history.push('./');
   };
 
@@ -41,7 +41,7 @@ const App: React.FC = () => {
         <nav>
           <Link to="/"> Home </Link>
           <Link to="/login"> Sign in </Link>
-          <Link to="/register"> Sign up </Link>
+          <Link to="/signup"> Sign up </Link>
           <Link to="/" onClick={() => onLogout()}>
             Log out
           </Link>
@@ -49,7 +49,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route
             path="/post"
             element={

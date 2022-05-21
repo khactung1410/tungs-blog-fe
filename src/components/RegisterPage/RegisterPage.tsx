@@ -7,7 +7,7 @@ import { useAppSelector } from '../../hooks';
 
 // import { userActions } from '../../redux/actions';
 
-function RegisterPage() {
+const RegisterPage: React.FC = () => {
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
@@ -105,6 +105,6 @@ function RegisterPage() {
       </form>
     </div>
   );
-}
+};
 
-export { RegisterPage };
+export default RegisterPage;

@@ -4,9 +4,9 @@
 import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { login } from '../../redux/actions';
+import { userActions } from '../../redux/actions';
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const [inputs, setInputs] = useState({
     username: '',
     password: ''
@@ -33,7 +33,7 @@ const LoginPage = () => {
     if (username && password) {
       // get return url from location state or default to home page
       const { from }: any = location.state || { from: { pathname: '/' } };
-      dispatch(login(username, password, from));
+      dispatch(userActions.login(username, password, from));
     }
   };
 
@@ -77,4 +77,4 @@ const LoginPage = () => {
   );
 };
 
-export { LoginPage };
+export default LoginPage;

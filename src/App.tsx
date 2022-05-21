@@ -13,12 +13,13 @@ import {
 import styled from 'styled-components';
 import './App.css';
 import HomePage from './components/HomePage';
-import { LoginPage } from './components/LoginPage';
-import { RegisterPage } from './components/RegisterPage';
+import LoginPage from './components/LoginPage';
+import RegisterPage from './components/RegisterPage';
 import { history, ProtectedRoute } from './helpers';
-import { alertActions, logout } from './redux/actions';
+import { logout } from './redux/actions';
 import Post from './components/Post/Post';
 import { useAppDispatch } from './hooks';
+import NotificationContainer from './components/Notification/NotificationContainer';
 
 export const AppWrapper = styled.div`
   position: relative;
@@ -26,15 +27,7 @@ export const AppWrapper = styled.div`
 `;
 
 const App: React.FC = () => {
-  const alert = useSelector((state: any) => state.alert);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    history.listen(() => {
-      // clear alert on location change
-      dispatch(alertActions.clear());
-    });
-  }, []);
 
   const onLogout = () => {
     dispatch(logout());
@@ -42,8 +35,8 @@ const App: React.FC = () => {
   };
 
   return (
-    <>
-      {alert.message && <div className={`alert ${alert.type}`}>{alert.message}</div>}
+    <div>
+      <NotificationContainer />
       <HistoryBrowerRouter history={history}>
         <nav>
           <Link to="/"> Home </Link>
@@ -68,7 +61,7 @@ const App: React.FC = () => {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </HistoryBrowerRouter>
-    </>
+    </div>
   );
 };
 

@@ -6,11 +6,11 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { userConstants } from '../../constants';
 import { userService } from '../../services';
-import { alertActions } from './alert.actions';
 import { history } from '../../helpers';
 import { RootState } from '../../store';
+import { notificationActions } from './notification.actions';
 
-export const login =
+const login =
   (
     username: string,
     password: string,
@@ -32,6 +32,7 @@ export const login =
       const response = await userService.login(username, password);
       dispatch(success(response)); // pass user data to reducer in the payload of the dispatch
       history.push(from);
+      dispatch(notificationActions.addNotification('Login Successfully!', 'SUCCESS'));
     } catch (error: any) {
       dispatch(
         failure(
@@ -40,7 +41,7 @@ export const login =
             : error.message
         )
       );
-      dispatch(alertActions.error(error.toString()));
+      dispatch(notificationActions.addNotification(error.toString(), 'DANGER'));
     }
 
     // dispatch(request({ username }));
@@ -132,3 +133,7 @@ export const logout = () => {
 //     return { type: userConstants.DELETE_FAILURE, id, error };
 //   }
 // }
+
+export const userActions = {
+  login
+};

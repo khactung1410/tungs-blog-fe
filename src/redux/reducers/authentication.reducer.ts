@@ -1,13 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { userConstants } from '../../constants';
 
+export interface UserInfo {
+  id?: string;
+  email?: string;
+  userName?: string;
+  createAt?: string;
+}
 export interface AuthenticationState {
   loggingIn?: boolean;
   loggedIn?: boolean;
   error?: string;
-  userInfo: {
-    userName?: string;
-  };
+  userInfo: UserInfo;
 }
 
 export interface Action {

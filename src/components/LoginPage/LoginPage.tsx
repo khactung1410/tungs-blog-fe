@@ -19,13 +19,13 @@ const LoginPage: React.FC = () => {
 
   // reset login status
   useEffect(() => {
-    // dispatch(logout());
+    dispatch(userActions.logout());
   }, []);
 
-  function handleChange(e: any) {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setInputs((input) => ({ ...input, [name]: value }));
-  }
+  };
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();

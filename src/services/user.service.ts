@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import jwt_decode from 'jwt-decode';
 import { authHeader } from '../helpers';
 
 const login = (userName: string, password: string) => {
@@ -17,7 +18,10 @@ const login = (userName: string, password: string) => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('user', JSON.stringify(user));
 
-      return user;
+      // decode user infor to use in internal app
+      const decodedUser = jwt_decode(user.accessToken);
+
+      return decodedUser;
     });
 };
 

@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import styled from 'styled-components';
+import { useAppSelector } from '../../hooks';
 
 export const HomeWrapper = styled.div`
   padding: 0px 40px;
 `;
 
 const HomePage: React.FC = () => {
+  const userinfo = useAppSelector((state: any) => state.authentication.userInfo);
   return (
     <HomeWrapper>
-      <h1>Your Blogs</h1>
+      <h1>{userinfo?.userName}&apos;s Blogs</h1>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px' }}>
         {Array.from(Array(10).keys()).map((key) => (
           <div key={key} className="single-blog-wrapper">

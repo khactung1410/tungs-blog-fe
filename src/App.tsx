@@ -1,13 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import {
   Routes,
   Route,
   Navigate,
-  Link,
   unstable_HistoryRouter as HistoryBrowerRouter
 } from 'react-router-dom';
 import styled from 'styled-components';
@@ -16,10 +14,10 @@ import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import { history, ProtectedRoute } from './helpers';
-import { userActions } from './redux/actions';
 import Post from './components/Post/Post';
-import { useAppDispatch } from './hooks';
 import NotificationContainer from './components/Notification/NotificationContainer';
+import Header from './components/Header';
+import { pathConstants } from './constants';
 
 export const AppWrapper = styled.div`
   position: relative;
@@ -27,31 +25,17 @@ export const AppWrapper = styled.div`
 `;
 
 const App: React.FC = () => {
-  const dispatch = useAppDispatch();
-
-  const onLogout = () => {
-    dispatch(userActions.logout());
-    history.push('./');
-  };
-
   return (
     <div>
       <NotificationContainer />
       <HistoryBrowerRouter history={history}>
-        <nav>
-          <Link to="/"> Home </Link>
-          <Link to="/login"> Sign in </Link>
-          <Link to="/signup"> Sign up </Link>
-          <Link to="/" onClick={() => onLogout()}>
-            Log out
-          </Link>
-        </nav>
+        <Header />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+          <Route path={pathConstants.ROOT} element={<HomePage />} />
+          <Route path={pathConstants.LOGIN} element={<LoginPage />} />
+          <Route path={pathConstants.SIGNUP} element={<SignupPage />} />
           <Route
-            path="/post"
+            path={pathConstants.BLOG_CREATE}
             element={
               <ProtectedRoute>
                 <Post />

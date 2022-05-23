@@ -8,6 +8,7 @@ export const HomeWrapper = styled.div`
 const Post: React.FC = () => {
   return (
     <HomeWrapper>
+      <div style={{ height: '85px' }} />
       <h1>Create Post - Protected Page</h1>
     </HomeWrapper>
   );

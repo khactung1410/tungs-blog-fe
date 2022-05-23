@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import { userConstants } from '../../constants';
+import { pathConstants, userConstants } from '../../constants';
 import { userService } from '../../services';
 import { history } from '../../helpers';
 import { RootState } from '../../store';
@@ -52,7 +52,7 @@ const signup = (user: any) => {
     userService.signup(user).then(
       (user: any) => {
         dispatch(success(user));
-        history.push('/login');
+        history.push(pathConstants.LOGIN);
         dispatch(notificationActions.addNotification('Sign Up Successfully!', 'SUCCESS'));
       },
       (error: any) => {

@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { pathConstants } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { userActions } from '../../redux/actions';
 
@@ -19,7 +20,7 @@ const SignupPage: React.FC = () => {
 
   // reset login status
   useEffect(() => {
-    // dispatch(userActions.logout());
+    dispatch(userActions.logout());
   }, []);
 
   function handleChange(e: any) {
@@ -38,6 +39,7 @@ const SignupPage: React.FC = () => {
 
   return (
     <div className="col-lg-8 offset-lg-2">
+      <div style={{ height: '100px' }} />
       <h2>Sign Up</h2>
       <form name="form" onSubmit={handleSubmit}>
         <div className="form-group">
@@ -101,7 +103,7 @@ const SignupPage: React.FC = () => {
             {signingUp && <span className="spinner-border spinner-border-sm mr-1" />}
             Sign Up
           </button>
-          <Link to="/login" className="btn btn-link">
+          <Link to={pathConstants.LOGIN} className="btn btn-link">
             Cancel
           </Link>
         </div>

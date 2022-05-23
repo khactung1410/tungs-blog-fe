@@ -27,8 +27,8 @@ const Notification: React.FC<Props> = ({ notification }) => {
   };
 
   return (
-    <div className={`${colorByNotiType()} text-center shadow`}>
-      {notification.message}
+    <div className={`${colorByNotiType()} text-center shadow d-flex justify-content-between`}>
+      <div>{notification.message}</div>
       <button
         type="button"
         className="close"
@@ -40,4 +40,4 @@ const Notification: React.FC<Props> = ({ notification }) => {
   );
 };
 
-export { Notification };
+export default Notification;

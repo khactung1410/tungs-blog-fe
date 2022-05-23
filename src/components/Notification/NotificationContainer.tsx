@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAppSelector } from '../../hooks';
 import { Notification as NotificationInterface } from '../../types';
-import { Notification } from './Notification';
+import Notification from './Notification';
 import { NotificationBox } from './Notification.styled';
 
 const NotificationContainer = () => {

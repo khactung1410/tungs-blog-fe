@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { pathConstants } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { userActions } from '../../redux/actions';
 
@@ -39,6 +40,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="col-lg-8 offset-lg-2">
+      <div style={{ height: '100px' }} />
       <h2>Login</h2>
       <form name="form" onSubmit={handleSubmit}>
         <div className="form-group">
@@ -68,7 +70,7 @@ const LoginPage: React.FC = () => {
             {loggingIn && <span className="spinner-border spinner-border-sm mr-1" />}
             Login
           </button>
-          <Link to="/signup" className="btn btn-link">
+          <Link to={pathConstants.SIGNUP} className="btn btn-link">
             SignUp
           </Link>
         </div>

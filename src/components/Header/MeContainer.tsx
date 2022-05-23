@@ -1,0 +1,43 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
+import my_avatar from '../../images/my_avatar.png';
+
+const styledName = {
+  padding: '4px 8px',
+  color: '#27272a',
+  fontWeight: '600',
+  fontSize: '23px',
+  textDecoration: 'none'
+};
+
+const styledRole = {
+  padding: '0 0 4px 8px',
+  color: '#616e7c',
+  fontSize: '18px'
+};
+
+const MeContainer: React.FC = () => {
+  return (
+    <div style={{ display: 'flex' }}>
+      <a href="/">
+        <img
+          src={my_avatar}
+          alt="Tung Duong Khac"
+          height="64"
+          width="63"
+          style={{ borderRadius: '50%' }}
+          className="avatar"
+        />
+      </a>
+      <div>
+        <a href="/" style={styledName}>
+          Tung Duong Khac
+        </a>
+        <div style={styledRole}>Software Engineer</div>
+      </div>
+    </div>
+  );
+};
+
+export default MeContainer;

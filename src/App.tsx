@@ -14,10 +14,10 @@ import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import { history, ProtectedRoute } from './helpers';
-import Post from './components/Post/Post';
 import NotificationContainer from './components/Notification/NotificationContainer';
 import Header from './components/Header';
 import { pathConstants } from './constants';
+import Blog from './components/Blog/Blog';
 
 export const AppWrapper = styled.div`
   position: relative;
@@ -38,7 +38,7 @@ const App: React.FC = () => {
             path={pathConstants.BLOG_CREATE}
             element={
               <ProtectedRoute>
-                <Post />
+                <Blog />
               </ProtectedRoute>
             }
           />

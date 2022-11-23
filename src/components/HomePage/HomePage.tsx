@@ -3,14 +3,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 export const HomeWrapper = styled.div`
-  padding: 0px 40px;
+  padding: 0px 0px;
 `;
 
 const HomePage: React.FC = () => {
   return (
     <HomeWrapper>
       <div style={{ height: '85px' }} />
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', marginLeft: '40px' }}>
         {Array.from(Array(10).keys()).map((key) => (
           <div key={key} className="single-blog-wrapper">
             <div className="blog-card blog-card-blog">

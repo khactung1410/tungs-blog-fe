@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import thunk from 'redux-thunk';
+import thunk, { ThunkDispatch } from 'redux-thunk';
 import { authentication, registration, users, notification } from './redux/reducers';
 
 const rootReducer = combineReducers({
@@ -14,6 +14,9 @@ export const store = configureStore({
   middleware: [thunk],
   devTools: true
 });
+// Định nghĩa các kiểu cho dispatch và state
+
+export type AppState = RootState;
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = ThunkDispatch<RootState, undefined, any>;

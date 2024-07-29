@@ -28,7 +28,6 @@ module.exports = {
   rules: {
     complexity: ['error', { max: 20 }],
     'no-unused-expressions': [0],
-    camelcase: [0],
     'react/require-default-props': [0],
     'react/jsx-props-no-spreading': [0],
     'no-param-reassign': [0],

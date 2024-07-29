@@ -5,7 +5,8 @@ import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { pathConstants } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { userActions } from '../../redux/actions';
+import { notificationActions, userActions } from '../../redux/actions';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
   const [inputs, setInputs] = useState({
@@ -16,7 +17,7 @@ const LoginPage: React.FC = () => {
   const { userName, password } = inputs;
   const loggingIn = useAppSelector((state: any) => state.authentication.loggingIn);
   const dispatch = useAppDispatch();
-  const location = useLocation();
+  const navigate = useNavigate();
 
   // reset login status
   useEffect(() => {
@@ -28,13 +29,12 @@ const LoginPage: React.FC = () => {
     setInputs((input) => ({ ...input, [name]: value }));
   };
 
-  const handleSubmit = async (e: SyntheticEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
     if (userName && password) {
-      // get return url from location state or default to home page
-      const { from }: any = location.state || { from: { pathname: '/' } };
-      dispatch(userActions.login(userName, password, from));
+      await dispatch(userActions.login(userName, password));
+      navigate(pathConstants.ROOT);
     }
   };
 

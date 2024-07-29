@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import my_avatar from '../../images/my_avatar.png';
+import my_avatar from '../../images/tung_english_avatar.png';
 
 const styledName = {
   padding: '4px 8px',
@@ -32,9 +32,9 @@ const MeContainer: React.FC = () => {
       </a>
       <div>
         <a href="/" style={styledName}>
-          Tung Duong Khac
+          Mr.Tung English
         </a>
-        <div style={styledRole}>Software Engineer</div>
+        <div style={styledRole}>English With Joy</div>
       </div>
     </div>
   );

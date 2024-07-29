@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import styled from 'styled-components';
+import my_avatar from '../../images/tung_english_avatar.png';
 
 export const HomeWrapper = styled.div`
   padding: 0px 0px;
@@ -9,7 +10,7 @@ export const HomeWrapper = styled.div`
 const HomePage: React.FC = () => {
   return (
     <HomeWrapper>
-      <div style={{ height: '85px' }} />
+      <div style={{ height: '100px' }} />
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', marginLeft: '40px' }}>
         {Array.from(Array(10).keys()).map((key) => (
           <div key={key} className="single-blog-wrapper">
@@ -24,29 +25,27 @@ const HomePage: React.FC = () => {
               </div>
               <div className="blog-table">
                 <h6 className="blog-category blog-text-success">
-                  <i className="far fa-newspaper" /> News
+                  <i className="far fa-newspaper" /> Active
                 </h6>
                 <h4 className="blog-card-caption">
-                  <a href="https://www.youtube.com/watch?v=eM213aMKTHg&list=PLv4t9A05XFZpIR_vrOzcTV-wcEww5xZwt&index=1">
-                    Lorem Ipsum is simply dummy text of the printing and
-                  </a>
+                  Lớp 3A
                 </h4>
                 <p className="blog-card-description">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                  Ghi chú: ......
                 </p>
                 <div className="ftr">
                   <div className="author">
-                    <a href="https://www.youtube.com/watch?v=eM213aMKTHg&list=PLv4t9A05XFZpIR_vrOzcTV-wcEww5xZwt&index=1">
+                    <p>
                       <img
-                        src="https://picsum.photos/id/1005/5760/3840"
+                        src={my_avatar}
                         alt="..."
                         className="avatar img-raised"
                       />
-                      <span>Lorem</span>
-                    </a>
+                      <span>GVCN: TungDK</span>
+                    </p>
                   </div>
                   <div className="stats">
-                    <i className="far fa-clock" /> 10 min
+                    <i className="far fa-clock" /> Sĩ số:
                   </div>
                 </div>
               </div>

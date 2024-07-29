@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import jwt_decode from 'jwt-decode';
 import { authHeader } from '../helpers';
 
@@ -12,32 +8,38 @@ const login = (userName: string, password: string) => {
     body: JSON.stringify({ userName, password })
   };
 
-  return fetch(`${process.env.REACT_APP_API_URL}/api/sessions`, requestOptions)
+  return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/login`, requestOptions)
     .then(handleResponse)
-    .then((user) => {
+    .then((token) => {
+      console.log(token)
       // store user details and jwt token in local storage to keep user logged in between page refreshes
-      localStorage.setItem('user', JSON.stringify(user));
-
-      // decode user infor to use in internal app
-      const decodedUser = jwt_decode(user.accessToken);
-
-      return decodedUser;
+      localStorage.setItem('token', JSON.stringify(token.token));
+      return token;
     });
+};
+
+const getUserByToken = (token: string) => {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token })
+  };
+  return fetch(`${process.env.API_URL}/api/teachers/getByToken`, requestOptions).then(handleResponse);
 };
 
 const signup = (user: any) => {
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(user)
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({...user, role: 2}) // role giáo viên, do chỉ có admin là người được dùng giao diện đăng kí tài khoản cho giáo viên(role=2)
   };
 
-  return fetch(`${process.env.REACT_APP_API_URL}/api/users`, requestOptions).then(handleResponse);
+  return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/register`, requestOptions).then(handleResponse);
 };
 
 const logout = () => {
   // remove user from local storage to log user out
-  localStorage.removeItem('user');
+  localStorage.removeItem('token');
 };
 
 export const userService = {
@@ -47,6 +49,7 @@ export const userService = {
   getAll,
   getById,
   update,
+  getUserByToken,
   delete: delete_user
 };
 
@@ -89,6 +92,7 @@ function delete_user(id: any) {
 }
 
 function handleResponse(response: any) {
+  console.log(response)
   return response.text().then((text: string) => {
     const data = text && JSON.parse(text);
     if (!response.ok) {

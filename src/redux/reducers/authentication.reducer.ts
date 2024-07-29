@@ -21,10 +21,10 @@ export interface Action {
 }
 const checkEmpty = (obj: Object) => Object.keys(obj).length === 0;
 
-const user = JSON.parse(localStorage.getItem('user') || '{}');
-const initialState: AuthenticationState = checkEmpty(user)
+const token = JSON.parse(localStorage.getItem('token') || '{}');
+const initialState: AuthenticationState = checkEmpty(token)
   ? {}
-  : { loggedIn: true, userInfo: jwt_decode(user.accessToken) };
+  : { loggedIn: true, userInfo: token };
 
 export const authentication = (state: AuthenticationState = initialState, action: Action) => {
   switch (action.type) {

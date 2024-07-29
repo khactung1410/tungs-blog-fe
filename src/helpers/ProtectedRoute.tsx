@@ -3,8 +3,8 @@ import { Navigate } from 'react-router-dom';
 import { pathConstants } from '../constants';
 
 export const ProtectedRoute = ({ children }: any) => {
-  const user = localStorage.getItem('user');
-  if (!user) {
+  const token = localStorage.getItem('token');
+  if (!token) {
     // user is not authenticated
     return <Navigate to={pathConstants.LOGIN} />;
   }

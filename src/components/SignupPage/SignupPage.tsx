@@ -1,11 +1,9 @@
-/* eslint-disable react/button-has-type */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { pathConstants } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { userActions } from '../../redux/actions';
+import { useNavigate } from 'react-router-dom';
 
 const SignupPage: React.FC = () => {
   const [user, setUser] = useState({
@@ -17,23 +15,24 @@ const SignupPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const signingUp = useAppSelector((state: any) => state.registration.signingUp);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  // reset login status
-  useEffect(() => {
-    dispatch(userActions.logout());
-  }, []);
+  // Sau hãy thay bằng hàm getAll Teacher để list ra danh sách các giáo viên
+  // useEffect(() => {
+  //   dispatch(userActions.getAllUsers());
+  // }, []);
 
-  function handleChange(e: any) {
+  const handleChange = (e: any) =>{
     const { name, value } = e.target;
     setUser((userInfo) => ({ ...userInfo, [name]: value }));
   }
 
-  function handleSubmit(e: any) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setSubmitted(true);
     if (user.email && user.userName && user.password && user.passwordConfirmation) {
-      dispatch(userActions.signup(user));
+      await dispatch(userActions.signup(user));
+      navigate(pathConstants.LOGIN);
     }
   }
 

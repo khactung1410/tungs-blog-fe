@@ -22,8 +22,8 @@ export const NewBlogButton = styled.button`
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 12px;
-  margin: 0 10px;
+  padding: 10px;
+  margin: 0 7px;
   transition: transform 0.2s; /* Thêm chuyển đổi mượt mà */
   &:hover {
     transform: scale(1.1); /* Phóng to khi trỏ vào */
@@ -35,8 +35,8 @@ export const ExportFlashCardButton = styled.button`
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 12px;
-  margin: 0 10px;
+  padding: 10px;
+  margin: 0 7px;
   transition: transform 0.2s; /* Thêm chuyển đổi mượt mà */
   &:hover {
     transform: scale(1.1); /* Phóng to khi trỏ vào */

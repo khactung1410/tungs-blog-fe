@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/tungs-blog-fe/static/css/main.2168bccf.css",
-    "main.js": "/tungs-blog-fe/static/js/main.0393b336.js",
+    "main.js": "/tungs-blog-fe/static/js/main.37268cbc.js",
     "static/js/787.686639bc.chunk.js": "/tungs-blog-fe/static/js/787.686639bc.chunk.js",
     "static/media/tung_english_avatar.png": "/tungs-blog-fe/static/media/tung_english_avatar.0749a1cd1f4b09167596.png",
     "index.html": "/tungs-blog-fe/index.html",
     "main.2168bccf.css.map": "/tungs-blog-fe/static/css/main.2168bccf.css.map",
-    "main.0393b336.js.map": "/tungs-blog-fe/static/js/main.0393b336.js.map",
+    "main.37268cbc.js.map": "/tungs-blog-fe/static/js/main.37268cbc.js.map",
     "787.686639bc.chunk.js.map": "/tungs-blog-fe/static/js/787.686639bc.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2168bccf.css",
-    "static/js/main.0393b336.js"
+    "static/js/main.37268cbc.js"
   ]
 }

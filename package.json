@@ -2,6 +2,7 @@
   "name": "tungs-blog-fe",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://khactung1410.github.io/tungs-blog-fe",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
@@ -14,6 +15,7 @@
     "bootstrap": "^5.3.3",
     "depcheck": "^1.4.7",
     "express": "^4.19.2",
+    "gh-pages": "^6.1.1",
     "jspdf": "^2.5.1",
     "pdfkit": "^0.15.0",
     "react": "^18.1.0",
@@ -26,6 +28,8 @@
   "scripts": {
     "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",  
     "test": "DISABLE_ESLINT_PLUGIN=true react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",

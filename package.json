@@ -12,6 +12,7 @@
     "axios": "^1.7.2",
     "body-parser": "^1.20.2",
     "bootstrap": "^5.3.3",
+    "depcheck": "^1.4.7",
     "express": "^4.19.2",
     "jspdf": "^2.5.1",
     "pdfkit": "^0.15.0",

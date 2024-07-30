@@ -25,7 +25,7 @@ export const submitText = ({...obj}): ThunkAction<void, RootState, unknown, AnyA
       console.log(requestOptions)
   
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/flashcard-pdf`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teachers/flashcard-pdf`, requestOptions)
         .then(handleResponseToPdf)
         .catch(err => console.log(err))
       } catch (error: any) {

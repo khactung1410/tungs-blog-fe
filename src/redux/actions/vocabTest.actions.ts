@@ -23,7 +23,7 @@ export const downloadWord = ({...obj}): ThunkAction<void, RootState, unknown, An
       };
   
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/vocab-test`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teachers/vocab-test`, requestOptions)
         .then(handleResponseToDocx)
         .catch(err => console.log(err))
       } catch (error: any) {

@@ -84,7 +84,7 @@ const FlashCardPDF: React.FC = () => {
             onChange={() => setWithWordPhonics(!withWordPhonics)}
           />
           <label className="form-check-label" htmlFor="withWordPhonics">
-            With word's Phonics
+            With word's Phonics (Có thêm phiên âm trong Flashcards ?)
           </label>
         </div>
         {warningLines.length > 0 && (

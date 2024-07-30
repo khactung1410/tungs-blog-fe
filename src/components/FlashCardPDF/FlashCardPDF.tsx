@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 import { submitText } from '../../redux/actions';
@@ -11,6 +11,8 @@ const FlashCardPDF: React.FC = () => {
   const [withWordPhonics, setWithWordPhonics] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { loading, fileUrl, error } = useSelector((state: RootState) => state);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const lines = text.split('\n');
@@ -47,6 +49,13 @@ const FlashCardPDF: React.FC = () => {
     return text.split('\n').filter(line => line.trim() !== '').length;
   };
 
+  // Effect to keep the scroll position at the top
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.scrollTop = 0;
+    }
+  }, [text]);
+
   return (
     <div className="container mt-5">
       <div style={{ height: '85px' }} />
@@ -68,8 +77,10 @@ const FlashCardPDF: React.FC = () => {
             rows={10}
             value={text}
             onChange={handleTextChange}
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'transparent', color: 'transparent', caretColor: 'black' }}
+            ref={textareaRef}
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'transparent', color: 'transparent', caretColor: 'black', overflow: 'hidden' }}
             required
+            onScroll={(e) => e.currentTarget.scrollTop = 0}
           />
         </div>
         <div className="text-center mt-2">
@@ -84,7 +95,7 @@ const FlashCardPDF: React.FC = () => {
             onChange={() => setWithWordPhonics(!withWordPhonics)}
           />
           <label className="form-check-label" htmlFor="withWordPhonics">
-            With word's Phonics (Có thêm phiên âm trong Flashcards ?)
+            With word's Phonics
           </label>
         </div>
         {warningLines.length > 0 && (

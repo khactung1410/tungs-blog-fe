@@ -73,6 +73,10 @@ const LoginPage: React.FC = () => {
           <Link to={pathConstants.SIGNUP} className="btn btn-link">
             SignUp
           </Link>
+          <div style={{ height: '50px' }} />
+          <div><i>* Contact TungDK in case you need support:</i></div>
+          <div><i>- Phone/ Zalo: 0918334306</i></div>
+          <div><i>- Facebook: <a href="https://www.facebook.com/duongkhactung1610" target="_blank" rel="noopener noreferrer" >https://www.facebook.com/duongkhactung1610</a></i></div>
         </div>
       </form>
     </div>

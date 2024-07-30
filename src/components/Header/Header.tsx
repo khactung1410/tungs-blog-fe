@@ -61,7 +61,7 @@ const Header: React.FC = () => {
           {userInfo && !isAtBlogCreationPage && (
             <StyledNavLink to={pathConstants.BLOG_CREATE}>
               <NewBlogButton type="button" onClick={onNewBlog}>
-                New Blog
+                New Test
               </NewBlogButton>
             </StyledNavLink>
           )}

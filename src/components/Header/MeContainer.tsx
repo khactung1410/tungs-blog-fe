@@ -31,7 +31,7 @@ const MeContainer: React.FC = () => {
         />
       </a>
       <div>
-        <a href="/" style={styledName}>
+        <a href="https://www.facebook.com/tienganhmrtung/" style={styledName} target="_blank" rel="noopener noreferrer">
           Mr.Tung English
         </a>
         <div style={styledRole}>English With Joy</div>

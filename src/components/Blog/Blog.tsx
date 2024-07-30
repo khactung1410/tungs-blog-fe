@@ -4,6 +4,11 @@ import { FormSection } from './Blog.styled';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Table, Form, Button, Container, Row, Col } from 'react-bootstrap';
+import my_avatar from '../../images/tung_english_avatar.png';
+
+export const HomeWrapper = styled.div`
+  padding: 0px 0px;
+`;
 
 // Styled-components
 const AttendanceContainer = styled(Container)`
@@ -35,109 +40,57 @@ const students = [
   { id: 9, name: 'Đỗ Ngọc Huyền', dob: '19/07/2008', status: 'Chưa thông báo' },
   { id: 10, name: 'Ngô Thanh Tùng', dob: '08/08/2008', status: 'Chưa thông báo' },
 ];
-type AttendanceType = 'present' | 'excused' | 'unexcused';
 
 
 const Blog: React.FC = () => {
-  const [attendance, setAttendance] = useState(
-    students.map(student => ({
-      ...student,
-      present: true,
-      excused: false,
-      unexcused: false,
-    }))
-  );
 
-  
-  const handleAttendanceChange = (index: number, type: AttendanceType) => {
-    const newAttendance = [...attendance];
-    newAttendance[index] = {
-      ...newAttendance[index],
-      present: type === 'present',
-      excused: type === 'excused',
-      unexcused: type === 'unexcused',
-    };
-    setAttendance(newAttendance);
-  };
 
   return (
-    <AttendanceContainer>
-      <div style={{ height: '105px' }} />
-      <h2>Điểm danh</h2>
-      <AttendanceForm>
-      <Row>
-          <Col md="4">
-            <Form.Group>
-              <Form.Label>Chọn lớp</Form.Label>
-              <Form.Control as="select">
-                <option>8A</option>
-                {/* Add more classes as needed */}
-              </Form.Control>
-            </Form.Group>
-          </Col>
-          <Col md="4">
-            <Form.Group>
-              <Form.Label>Chọn ngày</Form.Label>
-              <Form.Control type="date" />
-            </Form.Group>
-          </Col>
-          <Col md="4">
-            <Form.Group>
-              <Form.Label>&nbsp;</Form.Label>
-              <Button variant="success" className="w-100">
-                Thông báo cho PH
-              </Button>
-            </Form.Group>
-          </Col>
-        </Row>
-      </AttendanceForm>
-      <AttendanceTable striped bordered hover>
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Họ tên</th>
-            <th>Ngày sinh</th>
-            <th>Có mặt</th>
-            <th>Nghỉ có phép</th>
-            <th>Nghỉ không phép</th>
-            <th>Trạng thái</th>
-          </tr>
-        </thead>
-        <tbody>
-          {attendance.map((student, index) => (
-            <tr key={student.id}>
-              <td>{index + 1}</td>
-              <td>{student.name}</td>
-              <td>{student.dob}</td>
-              <td>
-                <Form.Check
-                  type="radio"
-                  checked={student.present}
-                  onChange={() => handleAttendanceChange(index, 'present')}
-                />
-              </td>
-              <td>
-                <Form.Check
-                  type="radio"
-                  checked={student.excused}
-                  onChange={() => handleAttendanceChange(index, 'excused')}
-                />
-              </td>
-              <td>
-                <Form.Check
-                  type="radio"
-                  checked={student.unexcused}
-                  onChange={() => handleAttendanceChange(index, 'unexcused')}
-                />
-              </td>
-              <td>
-                <StatusBadge>{student.status}</StatusBadge>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </AttendanceTable>
-    </AttendanceContainer>
+    <HomeWrapper>
+    <div style={{ height: '100px' }} />
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', marginLeft: '40px' }}>
+      {Array.from(Array(10).keys()).map((key) => (
+        <div key={key} className="single-blog-wrapper">
+          <div className="blog-card blog-card-blog">
+            <div className="blog-card-image">
+              <img
+                className="img"
+                alt="..."
+                src="https://picsum.photos/id/1084/535/353?grayscale"
+              />
+              <div className="ripple-cont" />
+            </div>
+            <div className="blog-table">
+              <h6 className="blog-category blog-text-success">
+                <i className="far fa-newspaper" /> Active
+              </h6>
+              <h4 className="blog-card-caption">
+                Lớp 3A
+              </h4>
+              <p className="blog-card-description">
+                Ghi chú: ......
+              </p>
+              <div className="ftr">
+                <div className="author">
+                  <p>
+                    <img
+                      src={my_avatar}
+                      alt="..."
+                      className="avatar img-raised"
+                    />
+                    <span>GVCN: TungDK</span>
+                  </p>
+                </div>
+                <div className="stats">
+                  <i className="far fa-clock" /> Sĩ số:
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </HomeWrapper>
   );
 };
 

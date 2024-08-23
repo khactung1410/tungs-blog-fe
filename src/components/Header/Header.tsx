@@ -1,20 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect } from 'react';
+// Header.tsx
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { notificationActions, userActions } from '../../redux/actions';
 import { useNavigate } from 'react-router-dom';
 import {
-  ExportFlashCardButton,
   HeaderWrapper,
-  NewBlogButton,
   RightSideWrapper,
-  StyledNavLink
+  NavLinksWrapper,
+  NavItem,
+  ToggleButton
 } from './Header.styled';
 import MeContainer from './MeContainer';
 import { pathConstants } from '../../constants';
 
 const Header: React.FC = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [activePath, setActivePath] = useState<string>('/');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -25,71 +27,98 @@ const Header: React.FC = () => {
     dispatch(userActions.logout());
     navigate(pathConstants.ROOT);
   };
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      dispatch(userActions.getLoggingInUserInforByToken(token));
-    }
-  }, [dispatch]);
+    setActivePath(location.pathname);
+  }, [dispatch, location.pathname]);
 
-  const onNewBlog = () => {
-    if (isUserLoggedIn) navigate(pathConstants.BLOG_CREATE);
-    else {
-      navigate(pathConstants.LOGIN);
-      dispatch(notificationActions.addNotification('You must log in to create new blog!', 'INFO'));
-    }
+  const toggleBackground = () => {
+    setIsDarkMode(!isDarkMode);
   };
 
-  const onNewFlashCardPDF = () => {
-    if (isUserLoggedIn) navigate(pathConstants.FLASHCARD_PDF_CREATE);
-    else {
-      navigate(pathConstants.LOGIN);
-      dispatch(
-        notificationActions.addNotification('You must log in to generate flashcard PDF!', 'INFO')
-      );
-    }
+  const handleNavClick = (path: string) => {
+    setActivePath(path);
+    navigate(path);
   };
 
-  const isAtBlogCreationPage = location.pathname === pathConstants.BLOG_CREATE;
-  const isAtFlashcardPdfCreationPage = location.pathname === pathConstants.FLASHCARD_PDF_CREATE;
   return (
     <>
-      <HeaderWrapper>
+      <HeaderWrapper isDarkMode={isDarkMode}>
         <MeContainer />
         <RightSideWrapper>
           {userInfo && <i>Hello {userInfo.userName},</i>}
-          {userInfo && !isAtBlogCreationPage && (
-            <StyledNavLink to={pathConstants.BLOG_CREATE}>
-              <NewBlogButton type="button" onClick={onNewBlog}>
-                New Test
-              </NewBlogButton>
-            </StyledNavLink>
-          )}
-          {userInfo && !isAtFlashcardPdfCreationPage && (
-            <StyledNavLink to={pathConstants.FLASHCARD_PDF_CREATE}>
-              <ExportFlashCardButton type="button" onClick={onNewFlashCardPDF}>
-                Flashcard/ Vocab Test
-              </ExportFlashCardButton>
-            </StyledNavLink>
-          )}
-
-          <nav>
-            <StyledNavLink to="/" bold>
+          <NavLinksWrapper>
+            <NavItem
+              isActive={activePath === '/'}
+              onClick={() => handleNavClick('/')}
+            >
               HOME
-            </StyledNavLink>
-            {isUserLoggedIn ? (
-              <StyledNavLink to="/" onClick={() => onLogout()}>
-                Log out
-              </StyledNavLink>
-            ) : (
-              <StyledNavLink to={pathConstants.LOGIN}>
-                Log in
-              </StyledNavLink>
+            </NavItem>
+            {userInfo && (
+              <NavItem
+                isActive={activePath === pathConstants.MATCH_WORD_MEANING}
+                onClick={() => handleNavClick(pathConstants.MATCH_WORD_MEANING)}
+              >
+                Game: Word-Meaning
+              </NavItem>
             )}
-            <StyledNavLink to={pathConstants.SIGNUP}>
-                  New Teacher
-            </StyledNavLink>
-          </nav>
+            {userInfo && (
+              <NavItem
+                isActive={activePath === pathConstants.CLASSES_MANAGE}
+                onClick={() => handleNavClick(pathConstants.CLASSES_MANAGE)}
+              >
+                Classes
+              </NavItem>
+            )}
+            {userInfo && (
+              <NavItem
+                isActive={activePath === pathConstants.STUDENTS_MANAGE}
+                onClick={() => handleNavClick(pathConstants.STUDENTS_MANAGE)}
+              >
+                Students
+              </NavItem>
+            )}
+            {userInfo && (
+              <NavItem
+                isActive={activePath === pathConstants.RANDOM_TEAM}
+                onClick={() => handleNavClick(pathConstants.RANDOM_TEAM)}
+              >
+                Random Teams
+              </NavItem>
+            )}
+            {userInfo && (
+              <NavItem
+                isActive={activePath === pathConstants.FLASHCARD_PDF_CREATE}
+                onClick={() => handleNavClick(pathConstants.FLASHCARD_PDF_CREATE)}
+              >
+                Flashcard/ Vocab Test
+              </NavItem>
+            )}
+            {userInfo?.role===0 && (  // Chỉ có role admin(role=0) mới có quyền đi tạo giáo viên mới(giáo viên mặc định role=2)
+              <NavItem
+                isActive={activePath === pathConstants.SIGNUP}
+                onClick={() => handleNavClick(pathConstants.SIGNUP)}
+              >
+                New Teacher
+              </NavItem>
+            )}
+
+            {isUserLoggedIn ? (
+              <NavItem onClick={onLogout}>
+                Log out
+              </NavItem>
+            ) : (
+              <NavItem
+                isActive={activePath === pathConstants.LOGIN}
+                onClick={() => handleNavClick(pathConstants.LOGIN)}
+              >
+                Log in
+              </NavItem>
+            )}
+          </NavLinksWrapper>
+          <ToggleButton onClick={toggleBackground}>
+            Toggle Background
+          </ToggleButton>
         </RightSideWrapper>
       </HeaderWrapper>
     </>

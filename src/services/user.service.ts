@@ -11,27 +11,17 @@ const login = (userName: string, password: string) => {
   return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/login`, requestOptions)
     .then(handleResponse)
     .then((token) => {
-      console.log(token)
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('token', JSON.stringify(token.token));
       return token;
     });
 };
 
-const getUserByToken = (token: string) => {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token })
-  };
-  return fetch(`${process.env.API_URL}/api/teachers/getByToken`, requestOptions).then(handleResponse);
-};
-
 const signup = (user: any) => {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({...user, role: 2}) // role giáo viên, do chỉ có admin là người được dùng giao diện đăng kí tài khoản cho giáo viên(role=2)
+    body: JSON.stringify({...user, role: 2}) // role=2 là giáo viên, do chỉ có admin(role=0) là người được dùng giao diện để đăng kí tài khoản cho giáo viên(role=2)
   };
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/register`, requestOptions).then(handleResponse);
@@ -49,7 +39,6 @@ export const userService = {
   getAll,
   getById,
   update,
-  getUserByToken,
   delete: delete_user
 };
 
@@ -92,7 +81,6 @@ function delete_user(id: any) {
 }
 
 function handleResponse(response: any) {
-  console.log(response)
   return response.text().then((text: string) => {
     const data = text && JSON.parse(text);
     if (!response.ok) {

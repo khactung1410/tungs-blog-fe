@@ -1,53 +1,67 @@
+// Header.styled.tsx
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export const HeaderWrapper = styled.div`
+export const HeaderWrapper = styled.div<{ isDarkMode: boolean }>`
   display: flex;
-  justify-content: space-between;
-  padding: 20px 100px;
-  background-color: white;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+  background-color: ${(props) => (props.isDarkMode ? '#1a1a1a' : '#f0f0f0')}; /* Darker background for dark mode */
+  color: ${(props) => (props.isDarkMode ? 'white' : 'black')};
   position: fixed;
+  left: 0;
   top: 0;
-  width: 100%;
+  bottom: 0;
+  width: 250px;
   z-index: 2;
 `;
 
 export const RightSideWrapper = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+  flex: 1; /* Allows this section to expand */
+  justify-content: space-between; /* Pushes ToggleButton to the bottom */
 `;
 
-export const NewBlogButton = styled.button`
+export const NavLinksWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1; /* Takes up available space above ToggleButton */
+  width: 100%; /* Ensures the width is the same as HeaderWrapper */
+`;
+
+export const NavItem = styled.div<{ isActive?: boolean }>`
+  width: 100%; /* Matches the width of the HeaderWrapper */
+  padding: 10px;
+  font-size: 18px;
+  background-color: ${(props) => (props.isActive ? '#0164ff' : 'transparent')}; /* Blue background if active */
+  color: ${(props) => (props.isActive ? 'white' : 'inherit')}; /* White text if active */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  text-align: left; /* Align text to the left */
+  display: flex;
+  align-items: center; /* Center items vertically within the NavItem */
+  padding-left: 15px; /* Add padding to ensure text is not too close to the edge */
+  &:hover {
+    background-color: ${(props) => (props.isActive ? '#014bbf' : '#e0e0e0')}; /* Lighter blue or gray on hover */
+  }
+`;
+
+export const ToggleButton = styled.button`
   background-color: #0164ff;
   color: white;
   border: none;
   border-radius: 8px;
   padding: 10px;
-  margin: 0 7px;
-  transition: transform 0.2s; /* Thêm chuyển đổi mượt mà */
+  margin-top: auto; /* Pushes the button to the bottom of the container */
+  cursor: pointer;
+  transition: background-color 0.3s;
   &:hover {
-    transform: scale(1.1); /* Phóng to khi trỏ vào */
-  }
-`;
-
-export const ExportFlashCardButton = styled.button`
-  background-color: #0164ff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px;
-  margin: 0 7px;
-  transition: transform 0.2s; /* Thêm chuyển đổi mượt mà */
-  &:hover {
-    transform: scale(1.1); /* Phóng to khi trỏ vào */
-  }
-`;
-export const StyledNavLink = styled(Link)<{ bold?: boolean }>`
-  margin: 12px;
-  font-size: 20px; /* Tăng cỡ chữ */
-  transition: transform 0.2s; /* Thêm chuyển đổi mượt mà */
-  font-weight: ${(props) => (props.bold ? 'bold' : 'normal')}; /* Làm đậm nếu cần */
-  &:hover {
-    transform: scale(1.1); /* Phóng to khi trỏ vào */
+    background-color: #014bbf;
   }
 `;

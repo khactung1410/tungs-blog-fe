@@ -4,17 +4,16 @@ import React from 'react';
 import my_avatar from '../../images/tung_english_avatar.png';
 
 const styledName = {
-  padding: '4px 8px',
   color: '#27272a',
   fontWeight: '600',
-  fontSize: '23px',
+  fontSize: '20px',
   textDecoration: 'none'
 };
 
 const styledRole = {
   padding: '0 0 4px 8px',
   color: '#616e7c',
-  fontSize: '18px'
+  fontSize: '15px'
 };
 
 const MeContainer: React.FC = () => {

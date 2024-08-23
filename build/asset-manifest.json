@@ -1,16 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.2168bccf.css",
-    "main.js": "/static/js/main.60249f7f.js",
+    "main.css": "/static/css/main.8ab34a5d.css",
+    "main.js": "/static/js/main.51ebef86.js",
     "static/js/787.686639bc.chunk.js": "/static/js/787.686639bc.chunk.js",
+    "static/media/Screenshot 2024-08-20 at 03.28.02.png": "/static/media/Screenshot 2024-08-20 at 03.28.02.748b4db8436ba6f36708.png",
+    "static/media/Screenshot 2024-08-20 at 03.28.36.png": "/static/media/Screenshot 2024-08-20 at 03.28.36.15ff2de63a78dbfb6691.png",
+    "static/media/Screenshot 2024-08-20 at 03.28.21.png": "/static/media/Screenshot 2024-08-20 at 03.28.21.95c28ad04805e0156779.png",
     "static/media/tung_english_avatar.png": "/static/media/tung_english_avatar.0749a1cd1f4b09167596.png",
     "index.html": "/index.html",
-    "main.2168bccf.css.map": "/static/css/main.2168bccf.css.map",
-    "main.60249f7f.js.map": "/static/js/main.60249f7f.js.map",
+    "main.8ab34a5d.css.map": "/static/css/main.8ab34a5d.css.map",
+    "main.51ebef86.js.map": "/static/js/main.51ebef86.js.map",
     "787.686639bc.chunk.js.map": "/static/js/787.686639bc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2168bccf.css",
-    "static/js/main.60249f7f.js"
+    "static/css/main.8ab34a5d.css",
+    "static/js/main.51ebef86.js"
   ]
 }

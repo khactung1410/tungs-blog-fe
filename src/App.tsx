@@ -14,29 +14,60 @@ import { ProtectedRoute } from './helpers';
 import NotificationContainer from './components/Notification/NotificationContainer';
 import Header from './components/Header';
 import { pathConstants } from './constants';
-import Blog from './components/Blog/Blog';
+import Blog from './components/MatchWordMeaning/MatchWordMeaning';
 import FlashCardPDF from './components/FlashCardPDF/FlashCardPDF';
+import RandomTeamPage from './components/RandomTeamPage';
+import MatchWordMeaning from './components/MatchWordMeaning/MatchWordMeaning';
+import ClassesManage from './components/ClassesManage';
+import StudentsManage from './components/StudentsManage';
+
 
 export const AppWrapper = styled.div`
   position: relative;
+  margin-left: 250px; /* Đặt lề trái để tránh đè lên menu */
   min-height: 400px;
 `;
 
+
 const App: React.FC = () => {
   return (
-    <div>
-      <NotificationContainer />
-      <Router>
-        <Header />
-        <Routes>
-          <Route path={pathConstants.ROOT} element={<HomePage />} />
-          <Route path={pathConstants.LOGIN} element={<LoginPage />} />
+  <AppWrapper>
+    <NotificationContainer />
+    <Router>
+      <Header />
+      <Routes>
+        <Route path={pathConstants.ROOT} element={<HomePage />} />
+        <Route path={pathConstants.LOGIN} element={<LoginPage />} />
           <Route path={pathConstants.SIGNUP} element={<SignupPage />} />
           <Route
-            path={pathConstants.BLOG_CREATE}
+            path={pathConstants.MATCH_WORD_MEANING}
             element={
               <ProtectedRoute>
-                <Blog />
+                <MatchWordMeaning />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={pathConstants.CLASSES_MANAGE}
+            element={
+              <ProtectedRoute>
+                <ClassesManage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={pathConstants.STUDENTS_MANAGE}
+            element={
+              <ProtectedRoute>
+                <StudentsManage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={pathConstants.RANDOM_TEAM}
+            element={
+              <ProtectedRoute>
+                <RandomTeamPage />
               </ProtectedRoute>
             }
           />
@@ -49,9 +80,9 @@ const App: React.FC = () => {
             }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
-    </div>
+      </Routes>
+    </Router>
+  </AppWrapper>
   );
 };
 

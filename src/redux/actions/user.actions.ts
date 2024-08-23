@@ -4,6 +4,7 @@ import { userConstants } from '../../constants';
 import { userService } from '../../services';
 import { RootState } from '../../store';
 import { notificationActions } from './notification.actions';
+import jwtDecode from 'jwt-decode';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -26,7 +27,8 @@ const login =
     try {
       dispatch(request({ userName }));
       const response = await userService.login(userName, password);
-      dispatch(success(response)); // pass user data to reducer in the payload of the dispatch
+      const loggingInUserInfo = jwtDecode(response.token);
+      dispatch(success(loggingInUserInfo)); // pass user data to reducer in the payload of the dispatch
       dispatch(notificationActions.addNotification('Login Successfully!', 'SUCCESS'));
     } catch (error: any) {
       dispatch(failure(error.toString()));
@@ -66,23 +68,14 @@ const logout = () => {
   return { type: userConstants.LOGOUT };
 };
 
-const getLoggingInUserInforByToken =
-  (
-    token: string
-  ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> =>
-  async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>): Promise<void> => {
-
-    try {
-      const logginInUserInfor = await userService.getUserByToken(token);
-      
-    } catch (error: any) {
-      console.log('Can not get user by token!');
-    }
-  };
+const getAllTeachers = () => {
+  userService.logout();
+  return { type: userConstants.LOGOUT };
+};
 
 export const userActions = {
   login,
   logout,
   signup,
-  getLoggingInUserInforByToken
+  getAllTeachers
 };

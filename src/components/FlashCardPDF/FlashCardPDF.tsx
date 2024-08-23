@@ -58,7 +58,6 @@ const FlashCardPDF: React.FC = () => {
 
   return (
     <div className="container mt-5">
-      <div style={{ height: '85px' }} />
       <h2>Vocabularies</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group" style={{ position: 'relative' }}>

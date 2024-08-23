@@ -2,7 +2,10 @@ export const pathConstants = {
   ROOT: '/',
   LOGIN: '/login',
   SIGNUP: '/signup',
-  BLOG_CREATE: '/blog/create',
+  MATCH_WORD_MEANING: '/match-word-meaning',
+  RANDOM_TEAM: '/random-team',
   VOCAB_TEST_CREATE: '/vocab-test-create',
-  FLASHCARD_PDF_CREATE: '/flashcard-pdf-create'
+  FLASHCARD_PDF_CREATE: '/flashcard-pdf-create',
+  CLASSES_MANAGE: '/classes-manage',
+  STUDENTS_MANAGE: '/students-manage'
 };

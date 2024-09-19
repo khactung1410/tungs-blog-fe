@@ -6,3 +6,4 @@ export const FormSection = styled.div`
   flex-direction: row;
   gap: 30px;
 `;
+

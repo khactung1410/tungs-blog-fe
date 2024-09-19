@@ -48,7 +48,7 @@ function getAll() {
     headers: authHeader()
   };
 
-  return fetch(`${process.env.API_URL}/users`, requestOptions).then(handleResponse);
+  return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/`, requestOptions).then(handleResponse);
 }
 
 function getById(id: any) {
@@ -57,7 +57,11 @@ function getById(id: any) {
     headers: authHeader()
   };
 
-  return fetch(`${process.env.API_URL}/users/${id}`, requestOptions).then(handleResponse);
+  return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/${id}`, requestOptions)
+  .then(handleResponse)
+  .then((teacherInfor) => {
+    return teacherInfor
+  });
 }
 
 function update(user: any) {

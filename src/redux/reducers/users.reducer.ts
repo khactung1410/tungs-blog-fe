@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { userConstants } from '../../constants';
 
 const initialUsersState = {
@@ -14,11 +12,16 @@ export function users(state = initialUsersState, action: any) {
       };
     case userConstants.GETALL_SUCCESS:
       return {
-        items: action.users
+        ...state,
+        items: action.payload
       };
     case userConstants.GETALL_FAILURE:
       return {
         error: action.error
+      };
+    case userConstants.GET_BY_ID_REQUEST:
+      return {
+        items: action.users
       };
     case userConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted

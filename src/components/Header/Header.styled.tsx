@@ -2,13 +2,13 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export const HeaderWrapper = styled.div<{ isDarkMode: boolean }>`
+export const HeaderWrapper = styled.div<{ isdarkmode: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 20px;
-  background-color: ${(props) => (props.isDarkMode ? '#1a1a1a' : '#f0f0f0')}; /* Darker background for dark mode */
-  color: ${(props) => (props.isDarkMode ? 'white' : 'black')};
+  background-color: ${(props) => (props.isdarkmode ? '#1a1a1a' : '#f0f0f0')}; /* Darker background for dark mode */
+  color: ${(props) => (props.isdarkmode ? 'white' : 'black')};
   position: fixed;
   left: 0;
   top: 0;
@@ -34,12 +34,12 @@ export const NavLinksWrapper = styled.div`
   width: 100%; /* Ensures the width is the same as HeaderWrapper */
 `;
 
-export const NavItem = styled.div<{ isActive?: boolean }>`
+export const NavItem = styled.div<{ isactive?: boolean }>`
   width: 100%; /* Matches the width of the HeaderWrapper */
   padding: 10px;
   font-size: 18px;
-  background-color: ${(props) => (props.isActive ? '#0164ff' : 'transparent')}; /* Blue background if active */
-  color: ${(props) => (props.isActive ? 'white' : 'inherit')}; /* White text if active */
+  background-color: ${(props) => (props.isactive ? '#0164ff' : 'transparent')}; /* Blue background if active */
+  color: ${(props) => (props.isactive ? 'white' : 'inherit')}; /* White text if active */
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
@@ -48,7 +48,7 @@ export const NavItem = styled.div<{ isActive?: boolean }>`
   align-items: center; /* Center items vertically within the NavItem */
   padding-left: 15px; /* Add padding to ensure text is not too close to the edge */
   &:hover {
-    background-color: ${(props) => (props.isActive ? '#014bbf' : '#e0e0e0')}; /* Lighter blue or gray on hover */
+    background-color: ${(props) => (props.isactive ? '#014bbf' : '#e0e0e0')}; /* Lighter blue or gray on hover */
   }
 `;
 

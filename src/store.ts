@@ -1,12 +1,14 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import thunk, { ThunkDispatch } from 'redux-thunk';
-import { authentication, registration, users, notification } from './redux/reducers';
+import { authentication, registration, users, notification, classes, students } from './redux/reducers';
 
 const rootReducer = combineReducers({
   authentication,
   registration,
   users,
-  notification
+  notification,
+  classes,
+  students
 });
 
 export const store = configureStore({

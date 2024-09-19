@@ -8,12 +8,8 @@ import jwtDecode from 'jwt-decode';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const login =
-  (
-    userName: string,
-    password: string
-  ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> =>
-  async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>): Promise<void> => {
+const login =(userName: string, password: string) =>
+  async (dispatch: any) => {
     const request = (user: any) => {
       return { type: userConstants.LOGIN_REQUEST, payload: user };
     };
@@ -27,8 +23,8 @@ const login =
     try {
       dispatch(request({ userName }));
       const response = await userService.login(userName, password);
-      const loggingInUserInfo = jwtDecode(response.token);
-      dispatch(success(loggingInUserInfo)); // pass user data to reducer in the payload of the dispatch
+      const loggingInTeacherInfo = jwtDecode(response.token);
+      dispatch(success(loggingInTeacherInfo));
       dispatch(notificationActions.addNotification('Login Successfully!', 'SUCCESS'));
     } catch (error: any) {
       dispatch(failure(error.toString()));
@@ -63,19 +59,70 @@ const signup = (user: any) => {
   }
 };
 
+const getTeacherById = (id: number) => {
+  return (dispatch: any) => {
+    dispatch(request(id));
+
+    userService.getById(id).then(
+      (teacherInfor: any) => {
+        dispatch(success(teacherInfor));
+      },
+      (error: any) => {
+        dispatch(failure(error.toString()));
+        dispatch(notificationActions.addNotification('getTeacherById() bị lỗi: '+error.toString(), 'DANGER'));
+      }
+    );
+  };
+
+  function request(user: any) {
+    return { type: userConstants.SIGNUP_REQUEST, user };
+  }
+  function success(user: any) {
+    return { type: userConstants.SIGNUP_SUCCESS, user };
+  }
+  function failure(error: any) {
+    return { type: userConstants.SIGNUP_FAILURE, error };
+  }
+};
+
 const logout = () => {
   userService.logout();
   return { type: userConstants.LOGOUT };
 };
 
 const getAllTeachers = () => {
-  userService.logout();
-  return { type: userConstants.LOGOUT };
+  return (dispatch: any) => {
+    const request = () => {
+      return { type: userConstants.GETALL_REQUEST };
+    };
+    const success = (teachers: any) => {
+      return { type: userConstants.GETALL_SUCCESS, payload: teachers };
+    };
+    const failure = (errorObj: any) => {
+      return { type: userConstants.GETALL_FAILURE, payload: errorObj };
+    };
+
+    try {
+      userService.getAll().then(
+        (teachers: any) => {
+          dispatch(success(teachers));
+        },
+        (error: any) => {
+          dispatch(failure(error.toString()));
+          dispatch(notificationActions.addNotification(error.toString(), 'DANGER'));
+        }
+      );
+    } catch (error: any) {
+      dispatch(failure(error.toString()));
+      dispatch(notificationActions.addNotification('Error when GET_ALL_TEACHERS!', 'DANGER'));
+    }
+  }
 };
 
 export const userActions = {
   login,
   logout,
   signup,
-  getAllTeachers
+  getAllTeachers,
+  getTeacherById
 };

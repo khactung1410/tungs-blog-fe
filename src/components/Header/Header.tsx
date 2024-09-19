@@ -22,7 +22,6 @@ const Header: React.FC = () => {
   const location = useLocation();
   const isUserLoggedIn = useAppSelector((state: any) => state.authentication.loggedIn);
   const userInfo = useAppSelector((state: any) => state.authentication.userInfo);
-
   const onLogout = () => {
     dispatch(userActions.logout());
     navigate(pathConstants.ROOT);
@@ -43,20 +42,20 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <HeaderWrapper isDarkMode={isDarkMode}>
+      <HeaderWrapper isdarkmode={isDarkMode}>
         <MeContainer />
         <RightSideWrapper>
           {userInfo && <i>Hello {userInfo.userName},</i>}
           <NavLinksWrapper>
             <NavItem
-              isActive={activePath === '/'}
+              isactive={activePath === '/'}
               onClick={() => handleNavClick('/')}
             >
               HOME
             </NavItem>
             {userInfo && (
               <NavItem
-                isActive={activePath === pathConstants.MATCH_WORD_MEANING}
+              isactive={activePath === pathConstants.MATCH_WORD_MEANING}
                 onClick={() => handleNavClick(pathConstants.MATCH_WORD_MEANING)}
               >
                 Game: Word-Meaning
@@ -64,7 +63,7 @@ const Header: React.FC = () => {
             )}
             {userInfo && (
               <NavItem
-                isActive={activePath === pathConstants.CLASSES_MANAGE}
+              isactive={activePath === pathConstants.CLASSES_MANAGE}
                 onClick={() => handleNavClick(pathConstants.CLASSES_MANAGE)}
               >
                 Classes
@@ -72,7 +71,7 @@ const Header: React.FC = () => {
             )}
             {userInfo && (
               <NavItem
-                isActive={activePath === pathConstants.STUDENTS_MANAGE}
+              isactive={activePath === pathConstants.STUDENTS_MANAGE}
                 onClick={() => handleNavClick(pathConstants.STUDENTS_MANAGE)}
               >
                 Students
@@ -80,7 +79,7 @@ const Header: React.FC = () => {
             )}
             {userInfo && (
               <NavItem
-                isActive={activePath === pathConstants.RANDOM_TEAM}
+              isactive={activePath === pathConstants.RANDOM_TEAM}
                 onClick={() => handleNavClick(pathConstants.RANDOM_TEAM)}
               >
                 Random Teams
@@ -88,7 +87,7 @@ const Header: React.FC = () => {
             )}
             {userInfo && (
               <NavItem
-                isActive={activePath === pathConstants.FLASHCARD_PDF_CREATE}
+              isactive={activePath === pathConstants.FLASHCARD_PDF_CREATE}
                 onClick={() => handleNavClick(pathConstants.FLASHCARD_PDF_CREATE)}
               >
                 Flashcard/ Vocab Test
@@ -96,7 +95,7 @@ const Header: React.FC = () => {
             )}
             {userInfo?.role===0 && (  // Chỉ có role admin(role=0) mới có quyền đi tạo giáo viên mới(giáo viên mặc định role=2)
               <NavItem
-                isActive={activePath === pathConstants.SIGNUP}
+              isactive={activePath === pathConstants.SIGNUP}
                 onClick={() => handleNavClick(pathConstants.SIGNUP)}
               >
                 New Teacher
@@ -109,7 +108,7 @@ const Header: React.FC = () => {
               </NavItem>
             ) : (
               <NavItem
-                isActive={activePath === pathConstants.LOGIN}
+              isactive={activePath === pathConstants.LOGIN}
                 onClick={() => handleNavClick(pathConstants.LOGIN)}
               >
                 Log in

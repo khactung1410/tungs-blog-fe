@@ -1,14 +1,13 @@
 // Header.styled.tsx
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
-export const HeaderWrapper = styled.div<{ isdarkmode: boolean }>`
+export const HeaderWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 20px;
-  background-color: ${(props) => (props.isdarkmode ? '#1a1a1a' : '#f0f0f0')}; /* Darker background for dark mode */
-  color: ${(props) => (props.isdarkmode ? 'white' : 'black')};
+  background-color: #f0f0f0;
+  color: black;
   position: fixed;
   left: 0;
   top: 0;
@@ -22,44 +21,47 @@ export const RightSideWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 20px;
-  flex: 1; /* Allows this section to expand */
-  justify-content: space-between; /* Pushes ToggleButton to the bottom */
+  flex: 1;
+  justify-content: space-between; /* Giữ khoảng trống và đưa nút xuống dưới cùng */
+  width: 100%;
 `;
 
 export const NavLinksWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  flex: 1; /* Takes up available space above ToggleButton */
-  width: 100%; /* Ensures the width is the same as HeaderWrapper */
+  flex: 1;
+  width: 100%;
 `;
 
 export const NavItem = styled.div<{ isactive?: boolean }>`
-  width: 100%; /* Matches the width of the HeaderWrapper */
+  width: 100%;
   padding: 10px;
   font-size: 18px;
-  background-color: ${(props) => (props.isactive ? '#0164ff' : 'transparent')}; /* Blue background if active */
-  color: ${(props) => (props.isactive ? 'white' : 'inherit')}; /* White text if active */
+  background-color: ${(props) => (props.isactive ? '#0164ff' : 'transparent')};
+  color: ${(props) => (props.isactive ? 'white' : 'inherit')};
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  text-align: left; /* Align text to the left */
+  text-align: left;
   display: flex;
-  align-items: center; /* Center items vertically within the NavItem */
-  padding-left: 15px; /* Add padding to ensure text is not too close to the edge */
+  align-items: center;
+  padding-left: 15px;
   &:hover {
-    background-color: ${(props) => (props.isactive ? '#014bbf' : '#e0e0e0')}; /* Lighter blue or gray on hover */
+    background-color: ${(props) => (props.isactive ? '#014bbf' : '#e0e0e0')};
   }
 `;
 
-export const ToggleButton = styled.button`
+// Styled cho nút Log out/Log in giống ToggleButton
+export const LogoutButton = styled.button`
   background-color: #0164ff;
   color: white;
   border: none;
   border-radius: 8px;
   padding: 10px;
-  margin-top: auto; /* Pushes the button to the bottom of the container */
+  width: 100%; /* Để nút có cùng chiều rộng với sidebar */
   cursor: pointer;
+  margin-top: auto; /* Đẩy nút xuống dưới cùng */
   transition: background-color 0.3s;
   &:hover {
     background-color: #014bbf;

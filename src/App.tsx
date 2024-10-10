@@ -20,6 +20,7 @@ import RandomTeamPage from './components/RandomTeamPage';
 import MatchWordMeaning from './components/MatchWordMeaning/MatchWordMeaning';
 import ClassesManage from './components/ClassesManage';
 import StudentsManage from './components/StudentsManage';
+import QuestionsManage from './components/QuestionsManage';
 
 
 export const AppWrapper = styled.div`
@@ -60,6 +61,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <StudentsManage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={pathConstants.QUESTIONS_MANAGE}
+            element={
+              <ProtectedRoute>
+                <QuestionsManage />
               </ProtectedRoute>
             }
           />

@@ -5,3 +5,6 @@ export * from './classes.reducer';
 export * from './students.reducer';
 export * from './notification.reducer';
 export * from './flashcard.reducer';
+export * from './questionType.reducer';
+export * from './questionTopic.reducer';
+export * from './multipleChoiceQuestion.reducer';

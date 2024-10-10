@@ -7,5 +7,6 @@ export const pathConstants = {
   VOCAB_TEST_CREATE: '/vocab-test-create',
   FLASHCARD_PDF_CREATE: '/flashcard-pdf-create',
   CLASSES_MANAGE: '/classes-manage',
-  STUDENTS_MANAGE: '/students-manage'
+  STUDENTS_MANAGE: '/students-manage',
+  QUESTIONS_MANAGE: '/questions-manage',
 };

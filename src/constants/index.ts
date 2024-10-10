@@ -3,3 +3,6 @@ export * from './class.constants';
 export * from './student.constants';
 export * from './notification.constants';
 export * from './path.constants';
+export * from './questionType.constants';
+export * from './questionTopic.constant';
+export * from './multipleChoiceQuestion.constants';

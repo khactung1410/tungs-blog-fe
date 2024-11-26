@@ -10,6 +10,16 @@ const getAll = async () => {
   return handleResponse(response);
 };
 
+const addFromGoogleSheet = async () => {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  };
+
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/multiple_choice_questions/add-multiple-choice-question-from-excel`, requestOptions)
+  return handleResponse(response);
+};
+
 function handleResponse(response: any) {
   return response.text().then((text: string) => {
     const data = text && JSON.parse(text);
@@ -23,4 +33,5 @@ function handleResponse(response: any) {
 
 export const multipleChoiceQuestionService = {
   getAll,
+  addFromGoogleSheet,
 };

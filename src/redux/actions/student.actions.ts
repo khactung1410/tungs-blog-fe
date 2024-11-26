@@ -94,10 +94,27 @@ const updateStudent = (formData: any) => {
     return { type: studentConstants.UPDATE_FAILURE, error };
   }
 };
+const addStudentListFromGoogleSheet = () => {
+  return async (dispatch: any) => {
+    const request = () => ({ type: studentConstants.ADD_FROM_GG_SHEET_REQUEST });
+    const success = (studentList: any) => ({ type: studentConstants.ADD_FROM_GG_SHEET_SUCCESS, payload: studentList });
+    const failure = (error: any) => ({ type: studentConstants.ADD_FROM_GG_SHEET_FAILURE, payload: error });
+
+    try {
+      const studentList = await studentService.addListFromGoogleSheet();
+      dispatch(notificationActions.addNotification('Thành công: Cập nhật danh sách học sinh', 'SUCCESS'));
+      dispatch(success(studentList));
+    } catch (error: any) {
+      dispatch(failure(error.toString()));
+      dispatch(notificationActions.addNotification(error.toString(), 'DANGER'));
+    }
+  };
+};
 
 export const studentActions = {
   getAll,
   createStudent,
   deleteStudent,
   updateStudent,
+  addStudentListFromGoogleSheet
 };

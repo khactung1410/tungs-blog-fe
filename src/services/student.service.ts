@@ -43,6 +43,16 @@ const remove = async (studentId: number) => {
   return handleResponse(response);
 };
 
+const addListFromGoogleSheet = async () => {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  };
+
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/students/add-student-list-from-excel`, requestOptions)
+  return handleResponse(response);
+};
+
 function handleResponse(response: any) {
   return response.text().then((text: string) => {
     const data = text && JSON.parse(text);
@@ -59,4 +69,5 @@ export const studentService = {
   create,
   update,
   remove,
+  addListFromGoogleSheet
 };

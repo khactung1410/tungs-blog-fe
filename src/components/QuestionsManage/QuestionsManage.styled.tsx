@@ -9,30 +9,38 @@ export const Dropdown = styled.select`
   padding: 10px;
 `;
 
+// Thu ngắn selection của "Loại câu hỏi"
+export const ShortDropdown = styled(Dropdown)`
+  width: 300px; /* Giảm độ rộng của dropdown "Loại câu hỏi" */
+`;
+
 export const Button = styled.button`
   padding: 10px 20px;
-  margin-bottom: 20px;
   cursor: pointer;
+  margin-left: 20px;
 `;
 
 export const FilterWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row; 
   gap: 15px;
+  align-items: center;
 `;
 
 export const LabelWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
-
+  flex: 1; 
+  
   label {
     margin: 0;
+    min-width: 120px;  
   }
 `;
 
 export const RadioGroupWrapper = styled.div`
+  margin-top: 20px; /* Tăng margin-top để tạo khoảng cách cho dòng "Lớp" */
   margin-bottom: 15px;
 `;
 
@@ -72,4 +80,11 @@ export const Table = styled.table`
 export const NoteText = styled.p`
   font-size: 14px;
   color: #555;
+`;
+
+export const RowWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 `;

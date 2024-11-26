@@ -18,7 +18,23 @@ const getAll = () => {
       }
     };
   };
+  const addFromGoogleSheet = () => {
+    return async (dispatch: any) => {
+      const request = () => ({ type: multipleChoiceQuestionConstants.ADD_FROM_GG_SHEET_REQUEST });
+      const success = (multipleChoiceQuestions: any) => ({ type: multipleChoiceQuestionConstants.ADD_FROM_GG_SHEET_SUCCESS, payload: multipleChoiceQuestions });
+      const failure = (error: any) => ({ type: multipleChoiceQuestionConstants.ADD_FROM_GG_SHEET_FAILURE, payload: error });
+  
+      try {
+        const multipleChoiceQuestions = await multipleChoiceQuestionService.addFromGoogleSheet();
+        dispatch(success(multipleChoiceQuestions));
+      } catch (error: any) {
+        dispatch(failure(error.toString()));
+        dispatch(notificationActions.addNotification(error.toString(), 'DANGER'));
+      }
+    };
+  };
 
   export const multipleChoiceQuestionActions = {
-    getAll
+    getAll, 
+    addFromGoogleSheet,
   };

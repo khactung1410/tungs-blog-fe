@@ -20,6 +20,7 @@ import RandomTeamPage from './components/RandomTeamPage';
 import MatchWordMeaning from './components/MatchWordMeaning/MatchWordMeaning';
 import ClassesManage from './components/ClassesManage';
 import StudentsManage from './components/StudentsManage';
+import StudentInformation from './components/StudentsManage/StudentInformation';
 import QuestionsManage from './components/QuestionsManage';
 
 
@@ -61,6 +62,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <StudentsManage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={`${pathConstants.STUDENTS_MANAGE}/:id`}
+            element={
+              <ProtectedRoute>
+                <StudentInformation />
               </ProtectedRoute>
             }
           />

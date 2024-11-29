@@ -42,7 +42,7 @@ const ResultTable = styled.table`
 `;
 
 // Danh sách tên con vật bằng tiếng Việt
-const animalNames = ['Hổ', 'Sư Tử', 'Gấu', 'Cọp', 'Chó', 'Mèo', 'Ngựa', 'Voi', 'Cáo', 'Khỉ'];
+const animalNames = ['Hổ', 'Sư Tử', 'Gấu', 'Cọp', 'Cá heo', 'Mèo', 'Ngựa', 'Voi', 'Cáo', 'Khỉ'];
 
 // Danh sách màu sắc cho các đội
 type TeamColor = 'info' | 'success' | 'warning' | 'danger' | 'primary' | 'secondary' | 'dark';

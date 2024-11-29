@@ -23,14 +23,17 @@ const login =(userName: string, password: string) =>
     try {
       dispatch(request({ userName }));
       const response = await userService.login(userName, password);
-      const loggingInTeacherInfo = jwtDecode(response.token);
+      console.log(response)
+      const loggingInTeacherInfo = jwtDecode(response.accessToken);
+      console.log('loggingInTeacherInfo: ', loggingInTeacherInfo)
       dispatch(success(loggingInTeacherInfo));
       dispatch(notificationActions.addNotification('Login Successfully!', 'SUCCESS'));
     } catch (error: any) {
       dispatch(failure(error.toString()));
-      dispatch(notificationActions.addNotification('Wrong Username or Password!', 'DANGER'));
+      dispatch(notificationActions.addNotification('Wrong Username or Password!!', 'DANGER'));
     }
   };
+
 
 const signup = (user: any) => {
   return (dispatch: any) => {

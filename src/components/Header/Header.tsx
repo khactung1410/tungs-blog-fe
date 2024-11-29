@@ -47,7 +47,7 @@ const Header: React.FC = () => {
               isactive={activePath === '/'}
               onClick={() => handleNavClick('/')}
             >
-              HOME
+              TRANG CHỦ
             </NavItem>
             {userInfo && (
               <NavItem
@@ -62,7 +62,7 @@ const Header: React.FC = () => {
               isactive={activePath === pathConstants.CLASSES_MANAGE}
                 onClick={() => handleNavClick(pathConstants.CLASSES_MANAGE)}
               >
-                Classes
+                Quản lý Lớp Học
               </NavItem>
             )}
             {userInfo && (
@@ -70,7 +70,7 @@ const Header: React.FC = () => {
               isactive={activePath === pathConstants.STUDENTS_MANAGE}
                 onClick={() => handleNavClick(pathConstants.STUDENTS_MANAGE)}
               >
-                Students
+                Quản lý Học Sinh
               </NavItem>
             )}
             {userInfo && (
@@ -78,7 +78,7 @@ const Header: React.FC = () => {
               isactive={activePath === pathConstants.QUESTIONS_MANAGE}
                 onClick={() => handleNavClick(pathConstants.QUESTIONS_MANAGE)}
               >
-                Questions
+                Quản lý Câu Hỏi
               </NavItem>
             )}
             {userInfo && (
@@ -86,7 +86,7 @@ const Header: React.FC = () => {
               isactive={activePath === pathConstants.RANDOM_TEAM}
                 onClick={() => handleNavClick(pathConstants.RANDOM_TEAM)}
               >
-                Random Teams
+                Chia đội
               </NavItem>
             )}
             {userInfo && (
@@ -94,7 +94,15 @@ const Header: React.FC = () => {
               isactive={activePath === pathConstants.FLASHCARD_PDF_CREATE}
                 onClick={() => handleNavClick(pathConstants.FLASHCARD_PDF_CREATE)}
               >
-                Flashcard/ Vocab Test
+                Tạo thẻ từ/ Tạo bài test
+              </NavItem>
+            )}
+            {userInfo && (
+              <NavItem
+              isactive={activePath === pathConstants.ATTENDANCE_MANAGE}
+                onClick={() => handleNavClick(pathConstants.ATTENDANCE_MANAGE)}
+              >
+                Điểm Danh
               </NavItem>
             )}
             {userInfo?.role === 0 && (  // Chỉ có role admin (role=0) mới có quyền tạo giáo viên mới (giáo viên mặc định role=2)

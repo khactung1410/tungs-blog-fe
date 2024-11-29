@@ -1,3 +1,4 @@
+// File authentication.reducer.ts
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import jwt_decode from 'jwt-decode';
 import { userConstants } from '../../constants';
@@ -19,12 +20,18 @@ export interface Action {
   type: string;
   payload?: string;
 }
-const checkEmpty = (obj: Object) => Object.keys(obj).length === 0;
+let parsedAccessToken = null;
+try {
+  const accessToken = localStorage.getItem('accessToken');
+  parsedAccessToken = accessToken ? JSON.parse(accessToken) : null;
+} catch (e) {
+  console.error("Error parsing accessToken:", e);
+}
 
-const token = JSON.parse(localStorage.getItem('token') || '{}');
-const initialState: AuthenticationState = checkEmpty(token)
-  ? {}
-  : { loggedIn: true, userInfo: token };
+const initialState: AuthenticationState = parsedAccessToken
+  ? { loggedIn: true, userInfo: parsedAccessToken }
+  : {};
+
 
 export const authentication = (state: AuthenticationState = initialState, action: Action) => {
   switch (action.type) {

@@ -1,9 +1,9 @@
 export function authHeader() {
-  // return authorization header with jwt token
-  const token = JSON.parse(localStorage.getItem('token') || '');
+  // Lấy accessToken từ localStorage
+  const accessToken = JSON.parse(localStorage.getItem('accessToken') || '');
 
-  if (token) {
-    return { Authorization: `Bearer ${token}` };
+  if (accessToken) {
+    return { Authorization: `Bearer ${accessToken}` };
   }
   return { Authorization: '' };
 }

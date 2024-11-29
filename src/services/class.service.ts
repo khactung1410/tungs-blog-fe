@@ -1,23 +1,24 @@
+// File class.service.ts
 import { authHeader } from '../helpers';
 
 const getAll = () => {
   const requestOptions = {
     method: 'GET',
-    headers: authHeader()
+    headers: authHeader() // Sử dụng authHeader() để lấy accessToken
   };
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/classes/`, requestOptions)
     .then(handleResponse)
     .then((classes: any) => {
-      return classes
-    })
-}
+      return classes;
+    });
+};
 
 const create = (classObj: any) => {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({...classObj})
+    body: JSON.stringify({ ...classObj })
   };
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/classes/`, requestOptions).then(handleResponse);
@@ -27,7 +28,7 @@ const update = (classObj: any) => {
   const requestOptions = {
     method: 'PUT',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({...classObj})
+    body: JSON.stringify({ ...classObj })
   };
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/classes/${classObj.id}`, requestOptions).then(handleResponse);
@@ -43,17 +44,17 @@ const remove = (classId: number) => {
 };
 
 const logout = () => {
-    // remove user from local storage to log user out
-    localStorage.removeItem('token');
-  };
-
+  // Xóa accessToken khỏi localStorage khi logout
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+};
 
 function handleResponse(response: any) {
   return response.text().then((text: string) => {
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {
-        // auto logout if 401 response returned from api
+        // Nếu bị lỗi 401 (token hết hạn), auto logout
         logout();
         window.location.reload();
       }

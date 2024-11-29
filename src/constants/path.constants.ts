@@ -9,4 +9,5 @@ export const pathConstants = {
   CLASSES_MANAGE: '/classes-manage',
   STUDENTS_MANAGE: '/students-manage',
   QUESTIONS_MANAGE: '/questions-manage',
+  ATTENDANCE_MANAGE: '/attendance-manage',
 };

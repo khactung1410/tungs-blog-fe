@@ -1,6 +1,7 @@
 import jwt_decode from 'jwt-decode';
 import { authHeader } from '../helpers';
 
+// File userService.js
 const login = (userName: string, password: string) => {
   const requestOptions = {
     method: 'POST',
@@ -10,10 +11,37 @@ const login = (userName: string, password: string) => {
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/login`, requestOptions)
     .then(handleResponse)
-    .then((token) => {
-      // store user details and jwt token in local storage to keep user logged in between page refreshes
-      localStorage.setItem('token', JSON.stringify(token.token));
-      return token;
+    .then((data) => {
+      // Lưu accessToken và refreshToken vào localStorage
+      localStorage.setItem('accessToken', JSON.stringify(data.accessToken));  // Lưu accessToken
+      localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));  // Lưu refreshToken
+      return data;
+    });
+};
+
+// File userService.js
+
+const refreshToken = () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) {
+    return Promise.reject('No refresh token available');
+  }
+
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ refreshToken })
+  };
+
+  return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/refresh-token`, requestOptions)
+    .then(handleResponse)
+    .then((data) => {
+      // Lưu lại accessToken mới và refreshToken mới (nếu có)
+      localStorage.setItem('accessToken', JSON.stringify(data.token));
+      if (data.refreshToken) {
+        localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
+      }
+      return data.token;
     });
 };
 
@@ -28,9 +56,11 @@ const signup = (user: any) => {
 };
 
 const logout = () => {
-  // remove user from local storage to log user out
-  localStorage.removeItem('token');
+  // Xóa accessToken và refreshToken khỏi localStorage khi logout
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
 };
+
 
 export const userService = {
   login,
@@ -39,7 +69,8 @@ export const userService = {
   getAll,
   getById,
   update,
-  delete: delete_user
+  delete: delete_user,
+  refreshToken,
 };
 
 function getAll() {
@@ -84,14 +115,27 @@ function delete_user(id: any) {
   return fetch(`${process.env.API_URL}/users/${id}`, requestOptions).then(handleResponse);
 }
 
+// File userService.js
+
 function handleResponse(response: any) {
   return response.text().then((text: string) => {
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {
-        // auto logout if 401 response returned from api
-        logout();
-        window.location.reload();
+        // Nếu token hết hạn, thử làm mới token
+        return refreshToken()
+          .then(newAccessToken => {
+            // Tạo lại header Authorization với token mới và retry request ban đầu
+            const retryRequestOptions = {
+              ...response.config,
+              headers: {
+                ...response.config.headers,
+                'Authorization': `Bearer ${newAccessToken}`
+              }
+            };
+            return fetch(retryRequestOptions);
+          })
+          .then(retryResponse => retryResponse.json()); // Tiếp tục trả về kết quả từ request đã retry
       }
 
       const error = (data && data.message) || response.statusText;
@@ -101,3 +145,4 @@ function handleResponse(response: any) {
     return data;
   });
 }
+

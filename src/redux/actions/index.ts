@@ -5,3 +5,4 @@ export * from './notification.actions';
 export * from './flashcard.actions';
 export * from './questionType.actions';
 export * from './questionTopic.actions';
+export * from './attendance.actions';

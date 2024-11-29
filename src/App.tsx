@@ -22,6 +22,7 @@ import ClassesManage from './components/ClassesManage';
 import StudentsManage from './components/StudentsManage';
 import StudentInformation from './components/StudentsManage/StudentInformation';
 import QuestionsManage from './components/QuestionsManage';
+import AttendanceManage from './components/AttendanceManage/AttendanceManage';
 
 
 export const AppWrapper = styled.div`
@@ -94,6 +95,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <FlashCardPDF />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={pathConstants.ATTENDANCE_MANAGE}
+            element={
+              <ProtectedRoute>
+                <AttendanceManage />
               </ProtectedRoute>
             }
           />

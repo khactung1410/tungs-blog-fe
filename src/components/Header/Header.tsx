@@ -110,7 +110,7 @@ const Header: React.FC = () => {
               isactive={activePath === pathConstants.SIGNUP}
                 onClick={() => handleNavClick(pathConstants.SIGNUP)}
               >
-                New Teacher
+                Thêm Giáo Viên
               </NavItem>
             )}
           </NavLinksWrapper>

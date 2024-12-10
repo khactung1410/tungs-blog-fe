@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import thunk, { ThunkDispatch } from 'redux-thunk';
-import { authentication, registration, users, notification, classes, students, questionTypes, questionTopics, multipleChoiceQuestions } from './redux/reducers';
+import { authentication, registration, users, notification, classes, students, questionTypes, questionTopics, multipleChoiceQuestions, attendanceSessions } from './redux/reducers';
 
 const rootReducer = combineReducers({
   authentication,
@@ -11,7 +11,8 @@ const rootReducer = combineReducers({
   students,
   questionTypes,
   questionTopics,
-  multipleChoiceQuestions
+  multipleChoiceQuestions,
+  attendanceSessions
 });
 
 export const store = configureStore({

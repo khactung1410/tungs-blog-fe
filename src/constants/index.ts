@@ -6,3 +6,4 @@ export * from './path.constants';
 export * from './questionType.constants';
 export * from './questionTopic.constant';
 export * from './multipleChoiceQuestion.constants';
+export * from './attendanceSession.constants';

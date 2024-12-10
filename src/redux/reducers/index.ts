@@ -8,3 +8,4 @@ export * from './flashcard.reducer';
 export * from './questionType.reducer';
 export * from './questionTopic.reducer';
 export * from './multipleChoiceQuestion.reducer';
+export * from './attendanceSessions.reducer';

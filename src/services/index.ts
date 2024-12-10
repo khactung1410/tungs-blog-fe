@@ -4,3 +4,4 @@ export { studentService } from './student.service';
 export { questionTypeService } from './questionType.service';
 export { questionTopicService } from './questionTopic.service';
 export { multipleChoiceQuestionService } from './multipleChoiceQuestion.service';
+export { attendanceSessionService } from './attendanceSession.service';

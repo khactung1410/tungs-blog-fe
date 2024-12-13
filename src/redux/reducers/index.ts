@@ -9,3 +9,4 @@ export * from './questionType.reducer';
 export * from './questionTopic.reducer';
 export * from './multipleChoiceQuestion.reducer';
 export * from './attendanceSessions.reducer';
+export * from './attendanceStudentRecord.reducer';

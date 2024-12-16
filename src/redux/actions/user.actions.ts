@@ -26,6 +26,10 @@ const login =(userName: string, password: string) =>
       console.log(response)
       const loggingInTeacherInfo = jwtDecode(response.accessToken);
       console.log('loggingInTeacherInfo: ', loggingInTeacherInfo)
+
+      // Lưu thông tin người dùng vào localStorage
+      localStorage.setItem('userInfo', JSON.stringify(loggingInTeacherInfo));
+
       dispatch(success(loggingInTeacherInfo));
       dispatch(notificationActions.addNotification('Login Successfully!', 'SUCCESS'));
     } catch (error: any) {
@@ -90,7 +94,13 @@ const getTeacherById = (id: number) => {
 
 const logout = () => {
   userService.logout();
+  // Xóa thông tin người dùng khỏi localStorage khi đăng xuất
+  localStorage.removeItem('userInfo');
   return { type: userConstants.LOGOUT };
+};
+
+const loginSuccess = (userInfo: any) => {
+  return { type: userConstants.LOGIN_SUCCESS, payload: userInfo };
 };
 
 const getAllTeachers = () => {
@@ -124,6 +134,7 @@ const getAllTeachers = () => {
 
 export const userActions = {
   login,
+  loginSuccess,
   logout,
   signup,
   getAllTeachers,

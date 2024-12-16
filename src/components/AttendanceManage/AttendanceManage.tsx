@@ -63,6 +63,7 @@ const AttendanceManage: React.FC = () => {
     moment().tz('Asia/Ho_Chi_Minh').startOf('day').format('YYYY-MM-DD')
   );  
   const [attendanceSessionToEdit, setAttendanceSessionToEdit] = useState<AttendanceSessionAttributes | null>(null);
+  const [isModalReady, setIsModalReady] = useState(false);
 
   const userInfo = useAppSelector((state: any) => state.authentication.userInfo);
 
@@ -86,14 +87,28 @@ const AttendanceManage: React.FC = () => {
   useEffect(() => {
     if (selectedClass) {
       setFilteredStudents(students.filter((student: StudentAttributes) => student.classId === Number(selectedClass)));
-      // Reset selected students khi chọn lớp mới
-      setSelectedStudents([]);
+      
+      if (isEditing && attendanceSessionToEdit) {
+        // Lấy danh sách học sinh được chọn từ attendanceSessionToEdit (chỉ khi đang sửa)
+        const studentsInSession = currentMonthAttendanceStudentRecords.filter(
+          (record: any) => record.sessionId === attendanceSessionToEdit.id
+        );
+  
+        const selectedStudentIds = studentsInSession
+          .filter((record: any) => record.isPresent === true)
+          .map((record: any) => record.studentId);
+  
+        setSelectedStudents(selectedStudentIds); // Cập nhật danh sách học sinh có mặt
+      } else {
+        // Reset khi tạo mới
+        setSelectedStudents([]);
+      }
     } else {
       setFilteredStudents([]);
+      setSelectedStudents([]); // Reset nếu không có lớp
     }
-    // Reset selectedStudents when class changes
-    setSelectedStudents([]); // This will reset the "Select All" checkbox
-  }, [selectedClass, students]);
+  }, [selectedClass, students, isEditing, attendanceSessionToEdit, currentMonthAttendanceStudentRecords]);
+  
 
   const filteredSessions = attendanceSessions.filter((session: AttendanceSessionAttributes) => {
     const sessionMonth = new Date(session.date).getMonth() + 1;
@@ -115,7 +130,6 @@ const AttendanceManage: React.FC = () => {
     setModalOpen(!modalOpen);
   };
   
-
   const handleCreateAttendance = () => {
     setIsEditing(false);  // Chế độ tạo mới
     // Lấy danh sách học sinh và trạng thái checkbox
@@ -134,7 +148,6 @@ const AttendanceManage: React.FC = () => {
         userInfo.id
       )
     );
-  
     // Đóng modal sau khi tạo điểm danh
     toggleModal();
   };
@@ -145,7 +158,7 @@ const AttendanceManage: React.FC = () => {
     setAttendanceSessionToEdit(session);
     setSelectedClass(String(session.classId));
     setSelectedDate(new Date(session.date).toISOString().split('T')[0]);
-  
+
     // Lọc ra những học sinh đã có mặt trong session này
     const studentsInSession = currentMonthAttendanceStudentRecords.filter(
       (record: any) => record.sessionId === session.id
@@ -153,11 +166,9 @@ const AttendanceManage: React.FC = () => {
   
     // Tạo danh sách học sinh có mặt (dựa trên trường isPresent)
     const selectedStudentIds = studentsInSession
-      .filter((record: any) => record.isPresent === 1) // Chọn những học sinh có mặt
+      .filter((record: any) => record.isPresent === true) // Chọn những học sinh có mặt
       .map((record: any) => record.studentId);
-  
-    setSelectedStudents(selectedStudentIds);  // Cập nhật danh sách học sinh có mặt
-  
+    setSelectedStudents(selectedStudentIds);
     setModalOpen(true);
   };  
 
@@ -170,15 +181,14 @@ const AttendanceManage: React.FC = () => {
       }));
 
       // Dispatch action sửa điểm danh
-      // dispatch(
-      //   attendanceActions.updateAttendanceSession(
-      //     attendanceSessionToEdit.id,
-      //     selectedClass,
-      //     selectedDate,
-      //     updatedAttendance,
-      //     userInfo.id
-      //   )
-      // );
+      dispatch(
+        attendanceActions.updateAttendanceSession(
+          attendanceSessionToEdit.id,
+          selectedDate,
+          updatedAttendance,
+          userInfo.id
+        )
+      );
     }
 
     setModalOpen(false);
@@ -373,9 +383,7 @@ const AttendanceManage: React.FC = () => {
                               if (e.target.checked) {
                                 setSelectedStudents([...selectedStudents, student.id]);
                               } else {
-                                setSelectedStudents(
-                                  selectedStudents.filter((id) => id !== student.id)
-                                );
+                                setSelectedStudents(selectedStudents.filter((id) => id !== student.id));
                               }
                             }}
                           />

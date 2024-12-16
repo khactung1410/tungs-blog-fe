@@ -31,6 +31,14 @@ const Header: React.FC = () => {
     setActivePath(location.pathname);
   }, [dispatch, location.pathname]);
 
+  // Khôi phục userInfo từ localStorage khi component được mount
+  useEffect(() => {
+    const savedUserInfo = localStorage.getItem('userInfo');
+    if (savedUserInfo) {
+      dispatch(userActions.loginSuccess(JSON.parse(savedUserInfo))); // Dispatch action để cập nhật Redux state
+    }
+  }, [dispatch]);
+
   const handleNavClick = (path: string) => {
     setActivePath(path);
     navigate(path);

@@ -22,18 +22,16 @@ const create = (classId: any, date: any, studentList: any, createdByTeacherId: a
 };
 
 
-const update = async (student: any) => {
-//   const requestOptions = {
-//     method: 'PUT',
-//     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ ...student }),
-//   };
+const update = async (attendanceSessionId: number, date: string, studentList: { studentId: number; isPresent: number }[], lastUpdatedByTeacherId: number) => {
+  const requestOptions = {
+    method: 'PUT',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ attendanceSessionId, date, studentList, lastUpdatedByTeacherId }),
+  };
 
-//   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/students/${student.id}`, requestOptions);
-//   return handleResponse(response);
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/attendance_session/${attendanceSessionId}`, requestOptions);
+  return handleResponse(response);
 };
-
-
 
 function handleResponse(response: any) {
   return response.text().then((text: string) => {

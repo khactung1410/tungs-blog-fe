@@ -13,7 +13,10 @@ export function attendanceSessions(state = initialAttendanceSessionsState, actio
     case attendanceSessionConstants.GETALL_FAILURE:
       return { error: action.payload };    
     case attendanceSessionConstants.CREATE_SUCCESS:
-      return { attendanceSessionsList: [...state.attendanceSessionsList, action.payload] };
+      return { 
+        ...state,
+        attendanceSessionsList: [...state.attendanceSessionsList, action.payload] 
+      };
     case attendanceSessionConstants.DELETE_SUCCESS:
       return { 
         ...state, 

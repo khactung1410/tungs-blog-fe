@@ -47,7 +47,6 @@ const QuestionsManage: React.FC = () => {
     dispatch(questionTypeActions.getAll());
     dispatch(questionTopicActions.getAll());
     dispatch(multipleChoiceQuestionActions.getAll());
-    console.log('MultipleChoiceQuestions:', multipleChoiceQuestions);
   }, [dispatch]);
 
   const handleQuestionTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -25,7 +25,6 @@ interface AttendanceSessionAttributes {
         const attendanceSessions = await attendanceSessionService.getAll();
         dispatch(success(attendanceSessions));
       } catch (error: any) {
-        console.log(3333)
         dispatch(failure(error.toString()));
         dispatch(notificationActions.addNotification(error.toString(), 'DANGER'));
       }
@@ -70,10 +69,8 @@ const updateAttendanceSession = (attendanceSessionId: number, date: string, stud
 
     try {
       const updatedAttendanceSession_updatedStudentRecords = await attendanceSessionService.update(attendanceSessionId, date, studentList, lastUpdatedByTeacherId);
-      console.log('updatedAttendanceSession_updatedStudentRecords', updatedAttendanceSession_updatedStudentRecords)
       const updatedAttendanceSession = updatedAttendanceSession_updatedStudentRecords.updatedSession
       const updatedStudentRecords = updatedAttendanceSession_updatedStudentRecords.updatedStudentRecords
-      console.log('updatedStudentRecords', updatedStudentRecords)
       dispatch(success(updatedAttendanceSession));
       dispatch(successStudentRecords(updatedStudentRecords));
       dispatch(notificationActions.addNotification('Sửa điểm danh thành công!', 'SUCCESS'));

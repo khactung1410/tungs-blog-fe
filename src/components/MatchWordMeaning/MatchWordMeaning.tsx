@@ -86,23 +86,26 @@ const WordMatchingGame: React.FC = () => {
     setTextareaHidden(false); // Hiện lại textarea
   };
 
-  const updateTime = () => {
-    setTime(prev => {
-      let { minutes, seconds, milliseconds } = prev;
+  const openRandomTeamPage = () => {
+    window.open('/random-team', '_blank'); // Mở tab mới với đường dẫn '/random-team'
+  };
+  
 
+  const updateTime = () => {
+    setTime((prev) => {
+      let { minutes, seconds, milliseconds } = prev;
+  
       milliseconds += 10; // Tăng 10ms
       if (milliseconds >= 1000) {
         milliseconds = 0;
         seconds += 1;
       }
-      if (seconds >= 60) {
-        seconds = 0;
-        minutes += 1;
-      }
-
-      return { minutes, seconds, milliseconds };
+  
+      return { minutes, seconds, milliseconds }; // Trả về đầy đủ các thuộc tính
     });
   };
+  
+  
 
   const calculateScale = (text: string, width: number, height: number): number => {
     const ratio = Math.min(width / text.length, height / 24); // Điều chỉnh tỷ lệ theo kích thước ô và độ dài văn bản
@@ -167,14 +170,21 @@ const WordMatchingGame: React.FC = () => {
                 hidden={textareaHidden}
               />
               <ButtonContainer>
+                <StyledButton
+                  onClick={openRandomTeamPage}
+                  style={{ backgroundColor: '#007bff', marginBottom: '10px' }}
+                >
+                  Chia Đội
+                </StyledButton>
+
                 {gameStarted ? (
-                  <StyledButton onClick={stopGame} style={{ backgroundColor: 'red' }}>Dừng Lại</StyledButton>
+                  <StyledButton onClick={stopGame} style={{ backgroundColor: 'red', marginLeft: '10px' }}>Dừng Lại</StyledButton>
                 ) : (
                   <StyledButton onClick={startGame}>Bắt Đầu</StyledButton>
                 )}
                 <TimerContainer>
                   <Timer>
-                    {`${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}:${String(time.milliseconds / 10).padStart(2, '0')}`}
+                    {`${time.seconds}:${String(time.milliseconds / 10).padStart(2, '0')}`}
                   </Timer>
                 </TimerContainer>
               </ButtonContainer>

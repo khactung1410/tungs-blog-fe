@@ -23,9 +23,7 @@ const login =(userName: string, password: string) =>
     try {
       dispatch(request({ userName }));
       const response = await userService.login(userName, password);
-      console.log(response)
       const loggingInTeacherInfo = jwtDecode(response.accessToken);
-      console.log('loggingInTeacherInfo: ', loggingInTeacherInfo)
 
       // Lưu thông tin người dùng vào localStorage
       localStorage.setItem('userInfo', JSON.stringify(loggingInTeacherInfo));

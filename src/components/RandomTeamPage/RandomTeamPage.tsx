@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { classActions, studentActions } from '../../redux/actions';
 
 // Styled-components cho custom styling
 const Textarea = styled.textarea`
@@ -41,17 +43,34 @@ const ResultTable = styled.table`
   }
 `;
 
+import {
+  Label,
+  Input,
+} from 'reactstrap';
+import {
+  FormGroupStyled,
+} from './RandomTeamPage.styled';
+
 // Danh sách tên con vật bằng tiếng Việt
-const animalNames = ['Hổ', 'Sư Tử', 'Gấu', 'Cọp', 'Cá heo', 'Mèo', 'Ngựa', 'Voi', 'Cáo', 'Khỉ'];
+const animalNames = ['Hổ', 'Sư Tử', 'Gấu', 'Cọp', 'Cá heo', 'Mèo', 'Ngựa', 'Voi', 'Cáo', 'Khỉ', 'cá chép', 'labubu', 'ngôi sao', 'mặt trời', 'nhà trắng', 'biển cả', 'xanh', 'đỏ', 'tím', 'vàng', 'tràm'];
 
 // Danh sách màu sắc cho các đội
 type TeamColor = 'info' | 'success' | 'warning' | 'danger' | 'primary' | 'secondary' | 'dark';
 const teamColors: TeamColor[] = ['info', 'success', 'warning', 'danger', 'primary', 'secondary', 'dark'];
 
 const RandomTeamPage: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [studentList, setStudentList] = useState<string>('');
   const [studentsPerTeam, setStudentsPerTeam] = useState<number>(1);
   const [teams, setTeams] = useState<{ [key: string]: string[] } | null>(null);
+  const [selectedClass, setSelectedClass] = useState('');
+  const classes = useAppSelector((state: any) => state.classes.classesList);
+  const students = useAppSelector((state: any) => state.students.studentsList);
+
+  useEffect(() => {
+    dispatch(classActions.getAll());
+    dispatch(studentActions.getAll());
+  }, [dispatch]);
 
   const handleSplitTeams = () => {
     const students = studentList.split(/[\n,]+/).map(name => name.trim()).filter(name => name);
@@ -89,7 +108,35 @@ const RandomTeamPage: React.FC = () => {
   return (
     <Container>
       <Row>
+        {/* Cột bên trái: Các trường nhập liệu */}
         <Col md={6}>
+          <FormGroupStyled>
+            <FormLabel for="classSelect">Lớp</FormLabel>
+            <Input
+              type="select"
+              name="classSelect"
+              id="classSelect"
+              value={selectedClass}
+              onChange={(e) => {
+                const selectedClassId = e.target.value;
+                setSelectedClass(selectedClassId);
+                // Lọc danh sách học sinh dựa trên lớp được chọn
+                const filteredStudents = students
+                  .filter((student: any) => student.classId == selectedClassId)
+                  .map((student: any) => student.name);
+  
+                // Cập nhật danh sách học sinh vào Textarea
+                setStudentList(filteredStudents.join('\n'));
+              }}
+            >
+              <option value="">Chọn Lớp</option>
+              {classes.map((cls: any) => (
+                <option key={cls.id} value={cls.id}>
+                  {cls.name}
+                </option>
+              ))}
+            </Input>
+          </FormGroupStyled>
           <Form.Group>
             <FormLabel>Danh Sách Học Sinh</FormLabel>
             <Textarea
@@ -97,7 +144,9 @@ const RandomTeamPage: React.FC = () => {
               onChange={(e) => setStudentList(e.target.value)}
               placeholder="Nhập danh sách tên sinh viên, mỗi tên trên 1 dòng hoặc cách nhau bằng dấu phẩy"
             />
-            <FormTextRight>Đã nhập vào: {studentList.split(/[\n,]+/).filter(name => name.trim()).length}</FormTextRight>
+            <FormTextRight>
+              Đã nhập vào: {studentList.split(/[\n,]+/).filter((name) => name.trim()).length}
+            </FormTextRight>
           </Form.Group>
           <Form.Group>
             <FormLabel>Số Thành Viên Mỗi Đội</FormLabel>
@@ -109,12 +158,14 @@ const RandomTeamPage: React.FC = () => {
               placeholder="Số lượng thành viên mỗi đội"
             />
           </Form.Group>
-          <Button onClick={handleSplitTeams} variant="primary">Chia Đội</Button>
+          <Button onClick={handleSplitTeams} variant="primary">
+            Chia Đội
+          </Button>
         </Col>
-      </Row>
-      {teams && (
-        <Row>
-          <Col md={12}>
+  
+        {/* Cột bên phải: Bảng kết quả chia đội */}
+        <Col md={6}>
+          {teams && (
             <ResultTable>
               <thead>
                 <tr>
@@ -133,10 +184,10 @@ const RandomTeamPage: React.FC = () => {
                           <Button
                             key={i}
                             variant={teamColor}
-                            style={{ 
-                              margin: '2px', 
-                              fontWeight: 'bold', 
-                              textTransform: 'uppercase' 
+                            style={{
+                              margin: '2px',
+                              fontWeight: 'bold',
+                              textTransform: 'uppercase',
                             }}
                           >
                             {member.toUpperCase()}
@@ -148,9 +199,9 @@ const RandomTeamPage: React.FC = () => {
                 })}
               </tbody>
             </ResultTable>
-          </Col>
-        </Row>
-      )}
+          )}
+        </Col>
+      </Row>
     </Container>
   );
 };

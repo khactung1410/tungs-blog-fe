@@ -91,14 +91,6 @@ const Header: React.FC = () => {
             )}
             {userInfo && (
               <NavItem
-              isactive={activePath === pathConstants.RANDOM_TEAM}
-                onClick={() => handleNavClick(pathConstants.RANDOM_TEAM)}
-              >
-                Chia đội
-              </NavItem>
-            )}
-            {userInfo && (
-              <NavItem
               isactive={activePath === pathConstants.FLASHCARD_PDF_CREATE}
                 onClick={() => handleNavClick(pathConstants.FLASHCARD_PDF_CREATE)}
               >

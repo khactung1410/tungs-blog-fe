@@ -11,7 +11,8 @@ import {
   ButtonContainer,
   StyledButton,
   GridContainer,
-  Square
+  Square,
+  GameMatchingContainer
 } from './MatchWordMeaning.styled';
 
 // Định nghĩa kiểu cho Square
@@ -157,7 +158,7 @@ const WordMatchingGame: React.FC = () => {
   }, [squares]);
 
   return (
-    <div style={{ width: '70vw', padding: '0 15px', boxSizing: 'border-box' }}>
+    <GameMatchingContainer>
       <Row>
         <Col>
           <Form.Group controlId="exampleForm.ControlTextarea1">
@@ -208,7 +209,7 @@ const WordMatchingGame: React.FC = () => {
           )}
         </Col>
       </Row>
-    </div>
+    </GameMatchingContainer>
   );
 };
 

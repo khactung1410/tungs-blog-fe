@@ -6,6 +6,7 @@ import { AppDispatch } from '../../store';
 import { downloadTracingWord, downloadVocabTest } from '../../redux/actions/vocabTest.actions';
 import { Tabs, Tab } from 'react-bootstrap';
 import styled from 'styled-components';
+import Loading from '../../common/Loading/loading';
 
 const TabContainer = styled.div`
   margin-top: 20px;
@@ -38,6 +39,7 @@ const FlashCardPDF: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, fileUrl, error } = useSelector((state: RootState) => state);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isLoadingPDF, setIsLoading] = useState(false); // Thêm trạng thái loading
 
   useEffect(() => {
     const lines = text.split('\n');
@@ -46,11 +48,18 @@ const FlashCardPDF: React.FC = () => {
     setInvalidLines(linesWithoutColon);
   }, [text]);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleFlashcard = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (text.trim() !== '' && invalidLines.length === 0) {
-      dispatch(submitText({ vocabs: text, withPhonics: withWordPhonics }));
+  if (text.trim() !== '' && invalidLines.length === 0) {
+    setIsLoading(true); // Set isLoadingPDF=true khi bắt đầu
+    try {
+      await dispatch(submitText({ vocabs: text, withPhonics: withWordPhonics }));
+    } catch (error) {
+      console.error("Error dispatching vocab test", error);
+    } finally {
+      setIsLoading(false); // Set isLoadingPDF=false khi xong
     }
+  }
   };
 
   const handleVocabTest = (event: React.FormEvent) => {
@@ -105,13 +114,15 @@ const FlashCardPDF: React.FC = () => {
       setNumberOfStudents(1);
     }
   };
-
   return (
     <div className="container mt-5">
+      {
+        isLoadingPDF ? <Loading message="Đang tải file, vui lòng đợi..." /> : ''
+      }
       <TabContainer>
         <Tabs activeKey={activeTab} onSelect={(k) => setActiveTab(k as string)}>
           <StyledTab eventKey="flashcard" title="TẠO FLASHCARDS">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleFlashcard}>
               <Title>Nhập danh sách từ:</Title>
               <p>Mỗi từ và nghĩa nằm trên 1 hàng, ngăn cách nhau bởi dấu hai chấm :</p>
               <textarea
@@ -143,7 +154,7 @@ const FlashCardPDF: React.FC = () => {
                   onChange={() => setWithWordPhonics(!withWordPhonics)}
                 />
                 <label className="form-check-label" htmlFor="withWordPhonics">
-                  With word's Phonics
+                  Có phiên âm của từ ?
                 </label>
               </div>
               <button

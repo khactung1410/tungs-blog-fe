@@ -38,7 +38,7 @@ const students = [
 type AttendanceType = 'present' | 'excused' | 'unexcused';
 
 
-const AttendancePage: React.FC = () => {
+const Client: React.FC = () => {
   const [attendance, setAttendance] = useState(
     students.map(student => ({
       ...student,
@@ -63,7 +63,7 @@ const AttendancePage: React.FC = () => {
     <>
         <AttendanceContainer>
         <div style={{ height: '10px' }} />
-        <h2>Điểm danh</h2>
+        <h2>Page này học sinh sau khi đăng nhập vào sẽ để làm bài tập</h2>
         <AttendanceForm>
         <Row>
             <Col md="4">
@@ -142,4 +142,4 @@ const AttendancePage: React.FC = () => {
   );
 };
 
-export default AttendancePage;
+export default Client;

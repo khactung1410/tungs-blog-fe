@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   padding: 20px;
+  margin-left: 250px; //cách lề trái để tránh bị Header che mất.
 `;
 
 export const Dropdown = styled.select`

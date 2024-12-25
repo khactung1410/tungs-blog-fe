@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, SyntheticEvent } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useInRouterContext, useLocation } from 'react-router-dom';
 import { pathConstants } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { notificationActions, userActions } from '../../redux/actions';
@@ -18,6 +18,7 @@ const LoginPage: React.FC = () => {
   const loggingIn = useAppSelector((state: any) => state.authentication.loggingIn);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const userInfo = useAppSelector((state: any) => state.authentication.userInfo);
 
   // reset login status
   useEffect(() => {
@@ -33,8 +34,19 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setSubmitted(true);
     if (userName && password) {
-      await dispatch(userActions.login(userName, password));
-      navigate(pathConstants.ROOT);
+      try {
+        await dispatch(userActions.login(userName, password));  // Dispatch login action
+        // Sau khi login thành công, navigate tới trang phù hợp
+        const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+        if (userInfo.role === 0 || userInfo.role === 1) {
+          navigate(pathConstants.FLASHCARD_PDF_CREATE
+          );  // Redirect to FlashCard PDF page
+        } else {
+          navigate(pathConstants.CLIENT);  // Redirect to student's page
+        }
+      } catch (error) {
+        console.error('Login failed', error);
+      }
     }
   };
 

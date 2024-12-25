@@ -3,6 +3,7 @@ import { Button, Input, Table } from 'reactstrap';
 
 export const StudentsContainer = styled.div`
   padding: 20px;
+  margin-left: 240px; //cách lề trái để tránh bị Header che mất.
 `;
 
 export const FormWrapper = styled.div`

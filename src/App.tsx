@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Routes,
   Route,
-  Navigate,
   BrowserRouter as Router,
 } from 'react-router-dom';
 import styled from 'styled-components';
@@ -22,10 +21,10 @@ import StudentsManage from './components/StudentsManage';
 import StudentInformation from './components/StudentsManage/StudentInformation';
 import QuestionsManage from './components/QuestionsManage';
 import AttendanceManage from './components/AttendanceManage/AttendanceManage';
+import Client from './components/Client';
 
 export const AppWrapper = styled.div`
   position: relative;
-  margin-left: 250px; /* Đặt lề trái để tránh đè lên menu */
   min-height: 400px;
 `;
 
@@ -41,85 +40,39 @@ const SnowContainer = styled.div`
 `;
 
 const App: React.FC = () => {
-
   return (
-    <AppWrapper>
-      <SnowContainer className="snow-container" />
-      <NotificationContainer />
-      <Router>
-        <Header />
+    <Router>
+      <AppWrapper>
+        <SnowContainer className="snow-container" />
+        <NotificationContainer />
         <Routes>
-          <Route path={pathConstants.ROOT} element={<HomePage />} />
+          {/* Các route không có Header */}
+          <Route path="/" element={<HomePage />} />
           <Route path={pathConstants.LOGIN} element={<LoginPage />} />
-          <Route path={pathConstants.SIGNUP} element={<SignupPage />} />
-          <Route
-            path={pathConstants.MATCH_WORD_MEANING}
-            element={
-              <ProtectedRoute>
-                <MatchWordMeaning />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={pathConstants.CLASSES_MANAGE}
-            element={
-              <ProtectedRoute>
-                <ClassesManage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={pathConstants.STUDENTS_MANAGE}
-            element={
-              <ProtectedRoute>
-                <StudentsManage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={`${pathConstants.STUDENTS_MANAGE}/:id`}
-            element={
-              <ProtectedRoute>
-                <StudentInformation />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={pathConstants.QUESTIONS_MANAGE}
-            element={
-              <ProtectedRoute>
-                <QuestionsManage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={pathConstants.RANDOM_TEAM}
-            element={
-              <ProtectedRoute>
-                <RandomTeamPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={pathConstants.FLASHCARD_PDF_CREATE}
-            element={
-              <ProtectedRoute>
-                <FlashCardPDF />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={pathConstants.ATTENDANCE_MANAGE}
-            element={
-              <ProtectedRoute>
-                <AttendanceManage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path={pathConstants.CLIENT} element={<Client />} />
+
+          {/* Các route có Header - được khai báo trong AppWithHeader */}
+          <Route path={pathConstants.MATCH_WORD_MEANING} element={<AppWithHeader><MatchWordMeaning /></AppWithHeader>} />
+          <Route path={pathConstants.CLASSES_MANAGE} element={<AppWithHeader><ClassesManage /></AppWithHeader>} />
+          <Route path={pathConstants.STUDENTS_MANAGE} element={<AppWithHeader><StudentsManage /></AppWithHeader>} />
+          <Route path={`${pathConstants.STUDENTS_MANAGE}/:id`} element={<AppWithHeader><StudentInformation /></AppWithHeader>} />
+          <Route path={pathConstants.QUESTIONS_MANAGE} element={<AppWithHeader><QuestionsManage /></AppWithHeader>} />
+          <Route path={pathConstants.RANDOM_TEAM} element={<AppWithHeader><RandomTeamPage /></AppWithHeader>} />
+          <Route path={pathConstants.FLASHCARD_PDF_CREATE} element={<AppWithHeader><FlashCardPDF /></AppWithHeader>} />
+          <Route path={pathConstants.ATTENDANCE_MANAGE} element={<AppWithHeader><AttendanceManage /></AppWithHeader>} />
+          <Route path={pathConstants.SIGNUP} element={<AppWithHeader><SignupPage /></AppWithHeader>} />
         </Routes>
-      </Router>
-    </AppWrapper>
+      </AppWrapper>
+    </Router>
+  );
+};
+
+const AppWithHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <>
+      <Header />
+      {children}
+    </>
   );
 };
 

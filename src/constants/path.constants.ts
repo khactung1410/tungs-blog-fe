@@ -10,4 +10,5 @@ export const pathConstants = {
   STUDENTS_MANAGE: '/students-manage',
   QUESTIONS_MANAGE: '/questions-manage',
   ATTENDANCE_MANAGE: '/attendance-manage',
+  CLIENT: '/client', // page này là để học sinh login vào làm bài tập
 };

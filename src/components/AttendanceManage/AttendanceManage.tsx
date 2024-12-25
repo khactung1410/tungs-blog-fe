@@ -12,7 +12,7 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import {
+import Spinner, {
   AttendanceContainer,
   ActionBar,
   StyledTable,
@@ -25,6 +25,9 @@ import {
 } from './AttendanceManage.styled';
 import { studentActions, classActions, attendanceActions, userActions } from '../../redux/actions';
 import { attendanceStudentRecordActions } from '../../redux/actions/attendanceStudentRecord.actions';
+import { pathConstants } from '../../constants';
+import { useNavigate } from 'react-router-dom';
+import Loading from '../../common/Loading/loading';
 
 interface StudentAttributes {
   id: number;
@@ -51,6 +54,7 @@ interface AttendanceSessionAttributes {
 
 const AttendanceManage: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
@@ -64,6 +68,7 @@ const AttendanceManage: React.FC = () => {
   const [attendanceSessionToEdit, setAttendanceSessionToEdit] = useState<AttendanceSessionAttributes | null>(null);
   const [isDuplicateSession, setIsDuplicateSession] = useState(false);
   const [errorDuplicatedSessionMessage, setErrorDuplicatedSessionMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true); // Thêm trạng thái loading
 
   const userInfo = useAppSelector((state: any) => state.authentication.userInfo);
 
@@ -90,6 +95,34 @@ const AttendanceManage: React.FC = () => {
     }
   };
 
+  // Hàm logout
+  const onLogout = () => {
+    dispatch(userActions.logout());
+    navigate(pathConstants.ROOT);
+  };
+
+  // Kiểm tra accessToken hết hạn
+  const isTokenExpired = (token: string | null) => {
+    if (!token) return true; // Nếu không có token, coi như đã hết hạn
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const decodedPayload = JSON.parse(atob(payloadBase64)); // Decode JWT payload
+      const currentTime = Date.now() / 1000; // Thời gian hiện tại (tính bằng giây)
+      return decodedPayload.exp < currentTime; // Token hết hạn nếu `exp` nhỏ hơn thời gian hiện tại
+    } catch (error) {
+      console.error('Invalid token:', error);
+      return true; // Nếu token không hợp lệ, coi như đã hết hạn
+    }
+  };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (isTokenExpired(accessToken)) {
+      console.log('Token đã hết hạn, thực hiện logout...');
+      onLogout();
+    }
+  }, []); // useEffect chỉ chạy một lần khi component được mount
+
   useEffect(() => {// Gọi hàm kiểm tra khi thay đổi lớp hoặc ngày
     if (selectedClass && selectedDate) {
       checkDuplicateSession(selectedClass, selectedDate);
@@ -97,13 +130,26 @@ const AttendanceManage: React.FC = () => {
   }, [selectedClass, selectedDate]);
 
   useEffect(() => {
-    dispatch(classActions.getAll());
-    dispatch(studentActions.getAll());
-    dispatch(userActions.getAllTeachers());
-    dispatch(attendanceActions.getAllAttendanceSessions());
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth() + 1;
-    dispatch(attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(currentYear, currentMonth));
+    // Đánh dấu bắt đầu tải dữ liệu
+    setIsLoading(true);
+    const currentYear = new Date().getFullYear()
+    const currentMonth = new Date().getMonth() + 1
+    Promise.all([
+      dispatch(classActions.getAll()),
+      dispatch(studentActions.getAll()),
+      dispatch(userActions.getAllTeachers()),
+      dispatch(attendanceActions.getAllAttendanceSessions()),
+      dispatch(attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(currentYear, currentMonth))
+    ])
+      .then(() => {
+        setIsLoading(false); // Kết thúc tải dữ liệu
+      })
+      .catch((err) => {
+        console.error('Error loading data:', err);
+        setIsLoading(false);
+      });
+    
+    
   }, [dispatch]);
 
   // useEffect mới để reset selectedStudents khi lớp thay đổi
@@ -133,7 +179,9 @@ const AttendanceManage: React.FC = () => {
   }, [selectedClass, students, isEditing, attendanceSessionToEdit, currentMonthAttendanceStudentRecords]);
   
 
-  const filteredSessions = attendanceSessions.filter((session: AttendanceSessionAttributes) => {
+  const filteredSessions = 
+   Array.isArray(attendanceSessions) && attendanceSessions.length > 0 ? 
+   attendanceSessions.filter((session: AttendanceSessionAttributes) => {
     const sessionMonth = new Date(session.date).getMonth() + 1;
     const isClassMatch = selectedClass ? session.classId === Number(selectedClass) : true;
     const isMonthMatch = sessionMonth === selectedMonth;
@@ -149,8 +197,7 @@ const AttendanceManage: React.FC = () => {
     const diffB = Math.abs(dateB.getTime() - today.getTime());
 
     return diffA - diffB; // Sắp xếp theo khoảng cách thời gian đến ngày hiện tại
-  });
-  ;
+  }): [];
 
   const resetModalState = () => {
     setSelectedClass('');
@@ -211,10 +258,10 @@ const AttendanceManage: React.FC = () => {
   const handleSaveAttendance = () => {
     // Lưu lại điểm danh, xử lý logic lưu sửa điểm danh tại đây
     if (attendanceSessionToEdit) {
-      const updatedAttendance = filteredStudents.map((student) => ({
+      const updatedAttendance = filteredStudents ? filteredStudents.map((student) => ({
         studentId: student.id,
         isPresent: selectedStudents.includes(student.id) ? 1 : 0,
-      }));
+      })) : [];
 
       // Dispatch action sửa điểm danh
       dispatch(
@@ -229,10 +276,12 @@ const AttendanceManage: React.FC = () => {
 
     setModalOpen(false);
   };
-  
 
   return (
     <AttendanceContainer>
+      {
+        isLoading ? <Loading message="Đang tải dữ liệu, vui lòng đợi..." /> : ''
+      }
       <ActionBar className="action-bar">
         <ButtonStyled color="primary" onClick={toggleModal}>
           Tạo Điểm Danh
@@ -248,11 +297,11 @@ const AttendanceManage: React.FC = () => {
               onChange={(e) => setSelectedClass(e.target.value)}
             >
               <option value="">Chọn Lớp</option>
-              {classes.map((cls: any) => (
+              {classes ? classes.map((cls: any) => (
                 <option key={cls.id} value={cls.id}>
                   {cls.name}
                 </option>
-              ))}
+              )): []}
             </Input>
           </FormGroupStyled>
 
@@ -304,9 +353,9 @@ const AttendanceManage: React.FC = () => {
         </thead>
         <tbody>
           {filteredSessions.map((session: AttendanceSessionAttributes) => {
-            const className = classes.find((cls: any) => cls.id === session.classId)?.name || 'N/A';
-            const createdTeacherName = teachers.find((teacher: any) => teacher.id === session.createdByTeacherId)?.userName || 'N/A';
-            const lastUpdatedTeacherName = teachers.find((teacher: any) => teacher.id === session.lastUpdatedByTeacherId)?.userName || 'N/A';
+            const className = classes ? (classes.find((cls: any) => cls.id === session.classId)?.name || 'N/A') : [];
+            const createdTeacherName = teachers ? (teachers.find((teacher: any) => teacher.id === session.createdByTeacherId)?.userName || 'N/A') : [];
+            const lastUpdatedTeacherName = teachers ? (teachers.find((teacher: any) => teacher.id === session.lastUpdatedByTeacherId)?.userName || 'N/A') : [];
             const formattedDate = moment(session.date).locale('vi').format('dddd - DD/MM/YYYY');
             const createdAtFormatted = session.createdAt
               ? new Date(session.createdAt).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
@@ -319,15 +368,15 @@ const AttendanceManage: React.FC = () => {
                 <td>{formattedDate}</td> {/* Hiển thị ngày định dạng dd/mm/yyyy */}
                 <td>
                   {(() => {
-                    const sessionRecords = currentMonthAttendanceStudentRecords.filter(
+                    const sessionRecords = currentMonthAttendanceStudentRecords ? currentMonthAttendanceStudentRecords.filter(
                       (record: any) => record.sessionId === session.id
-                    );
+                    ): [];
 
                     const totalStudents = sessionRecords.length;
                     const presentStudents = sessionRecords.filter((record: any) => record.isPresent).length;
                     const absentRecords = sessionRecords.filter((record: any) => !record.isPresent);
                     const absentStudentNames = absentRecords
-                      .map((record: any) => students.find((student: any) => student.id === record.studentId)?.name)
+                      .map((record: any) => students ? (students.find((student: any) => student.id === record.studentId)?.name) : [])
                       .filter(Boolean);
 
                     // Chia danh sách học sinh vắng thành các nhóm, mỗi nhóm tối đa 4 học sinh
@@ -392,11 +441,11 @@ const AttendanceManage: React.FC = () => {
                   disabled={isEditing}  // Disable khi sửa điểm danh
                 >
                   <option value="">Chọn Lớp</option>
-                  {classes.map((cls: any) => (
+                  {classes ? classes.map((cls: any) => (
                     <option key={cls.id} value={cls.id}>
                       {cls.name}
                     </option>
-                  ))}
+                  )) : []}
                 </Input>
               </FormGroup>
 
@@ -449,7 +498,7 @@ const AttendanceManage: React.FC = () => {
                 </thead>
                 <tbody>
                   {filteredStudents.map((student: StudentAttributes) => {
-                    const className = classes.find((cls: any) => cls.id === student.classId)?.name || '';
+                    const className = classes ? (classes.find((cls: any) => cls.id === student.classId)?.name || '') : [];
                     return (
                       <tr key={student.id}>
                         <td>

@@ -51,12 +51,6 @@ const Header: React.FC = () => {
         <RightSideWrapper>
           {userInfo && <i>Hello {userInfo.userName},</i>}
           <NavLinksWrapper>
-            <NavItem
-              isactive={activePath === '/'}
-              onClick={() => handleNavClick('/')}
-            >
-              TRANG CHỦ
-            </NavItem>
             {userInfo && (
               <NavItem
               isactive={activePath === pathConstants.MATCH_WORD_MEANING}

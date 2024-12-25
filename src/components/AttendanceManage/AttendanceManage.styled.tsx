@@ -1,9 +1,10 @@
 // AttendanceManage.styled.tsx updated to match StudentsManage style
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Button, Form, FormGroup, Modal, Table } from 'reactstrap';
 
 export const AttendanceContainer = styled.div`
   padding: 20px;
+  margin-left: 250px; //cách lề trái để tránh bị Header che mất.
 `;
 
 export const ActionBar = styled.div`
@@ -91,3 +92,80 @@ export const ScrollableTableWrapper = styled.div`
   max-height: 80vh; /* Chiều cao tối đa cho vùng cuộn */
   overflow-y: auto; /* Cho phép cuộn dọc phần dữ liệu */
 `;
+
+
+const rotator = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(270deg);
+  }
+`;
+
+const dash = keyframes`
+  0% {
+    stroke-dashoffset: 187;
+  }
+  50% {
+    stroke-dashoffset: 46.75;
+    transform: rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: 187;
+    transform: rotate(450deg);
+  }
+`;
+
+const colors = keyframes`
+  0% {
+    stroke: #4285F4;
+  }
+  25% {
+    stroke: #DE3E35;
+  }
+  50% {
+    stroke: #F7C223;
+  }
+  75% {
+    stroke: #1B9A59;
+  }
+  100% {
+    stroke: #4285F4;
+  }
+`;
+
+const SpinnerWrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const SpinnerSVG = styled.svg`
+  animation: ${rotator} 1.4s linear infinite;
+  width: 65px;
+  height: 65px;
+`;
+
+const SpinnerCircle = styled.circle`
+  stroke-dasharray: 187;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation: 
+    ${dash} 1.4s ease-in-out infinite, 
+    ${colors} 5.6s ease-in-out infinite;
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+`;
+
+const Spinner = () => (
+  <SpinnerWrapper>
+    <SpinnerSVG viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+      <SpinnerCircle cx="33" cy="33" r="30" />
+    </SpinnerSVG>
+  </SpinnerWrapper>
+);
+
+export default Spinner;

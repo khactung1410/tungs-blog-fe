@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import background1 from '../../images/Screenshot 2024-08-20 at 03.28.02.png';
@@ -57,13 +58,21 @@ const CallToActionButton = styled(Button as any)`
 `;
 
 const LandingPage: React.FC = () => {
+  const navigate = useNavigate();  // Khởi tạo useNavigate
+
+  const handleJoinUsClick = () => {
+    navigate('/login'); // Điều hướng tới trang đăng nhập khi ấn nút
+  };
   return (
     <PageWrapper>
       <HeroSection>
         <Container>
           <h1>Welcome to Mr.Tung English</h1>
           <p>House No. 116, Duong Xa Street, Thieu Duong Ward, Thanh Hoa City</p>
-          <CallToActionButton size="lg">Join Us Now</CallToActionButton>
+          {/* Thêm onClick vào nút để gọi hàm điều hướng */}
+          <CallToActionButton size="lg" onClick={handleJoinUsClick}>
+            Log In
+          </CallToActionButton>
         </Container>
       </HeroSection>
 

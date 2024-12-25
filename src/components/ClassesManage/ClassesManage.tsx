@@ -6,6 +6,7 @@ import { classActions, userActions } from '../../redux/actions';
 
 const ClassesContainer = styled.div`
   padding: 20px;
+  margin-left: 250px; //cách lề trái để tránh bị Header che mất.
 `;
 
 const FormWrapper = styled.div`

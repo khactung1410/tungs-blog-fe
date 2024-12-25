@@ -3,6 +3,13 @@
 import styled from 'styled-components';
 import { Form } from 'react-bootstrap';
 
+export const GameMatchingContainer = styled.div`
+  margin-left: 240px; //cách lề trái để tránh bị Header che mất.
+  width: 75vw;
+  padding: 0 15px;
+  box-sizing: border-box;
+`;
+
 export const FormSection = styled.div`
   display: flex;
   width: 723px;

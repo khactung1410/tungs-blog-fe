@@ -27,7 +27,6 @@ const login =(userName: string, password: string) =>
 
       // Lưu thông tin người dùng vào localStorage
       localStorage.setItem('userInfo', JSON.stringify(loggingInTeacherInfo));
-
       dispatch(success(loggingInTeacherInfo));
       dispatch(notificationActions.addNotification('Login Successfully!', 'SUCCESS'));
     } catch (error: any) {

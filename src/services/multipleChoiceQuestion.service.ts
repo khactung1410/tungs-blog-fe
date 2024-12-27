@@ -3,7 +3,7 @@ import { authHeader } from '../helpers';
 const getAll = async () => {
   const requestOptions = {
     method: 'GET',
-    headers: authHeader(),
+    headers: {...authHeader(), "ngrok-skip-browser-warning": "69420"},
   };
 
   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/multiple_choice_questions/`, requestOptions);
@@ -13,7 +13,7 @@ const getAll = async () => {
 const addFromGoogleSheet = async () => {
   const requestOptions = {
     method: 'POST',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    headers: { ...authHeader(), 'Content-Type': 'application/json', "ngrok-skip-browser-warning": "69420" }
   };
 
   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/multiple_choice_questions/add-multiple-choice-question-from-excel`, requestOptions)

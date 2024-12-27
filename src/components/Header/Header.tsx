@@ -56,10 +56,10 @@ const Header: React.FC = () => {
               isactive={activePath === pathConstants.MATCH_WORD_MEANING}
                 onClick={() => handleNavClick(pathConstants.MATCH_WORD_MEANING)}
               >
-                Game: Word-Meaning
+                Game: Nối Từ
               </NavItem>
             )}
-            {userInfo && (
+            {userInfo?.role===0 && (
               <NavItem
               isactive={activePath === pathConstants.CLASSES_MANAGE}
                 onClick={() => handleNavClick(pathConstants.CLASSES_MANAGE)}
@@ -67,7 +67,7 @@ const Header: React.FC = () => {
                 Quản lý Lớp Học
               </NavItem>
             )}
-            {userInfo && (
+            {userInfo?.role===0 && (
               <NavItem
               isactive={activePath === pathConstants.STUDENTS_MANAGE}
                 onClick={() => handleNavClick(pathConstants.STUDENTS_MANAGE)}

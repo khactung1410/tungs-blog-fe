@@ -9,7 +9,6 @@ import './App.css';
 import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
-import { ProtectedRoute } from './helpers';
 import NotificationContainer from './components/Notification/NotificationContainer';
 import Header from './components/Header';
 import { pathConstants } from './constants';
@@ -21,7 +20,7 @@ import StudentsManage from './components/StudentsManage';
 import StudentInformation from './components/StudentsManage/StudentInformation';
 import QuestionsManage from './components/QuestionsManage';
 import AttendanceManage from './components/AttendanceManage/AttendanceManage';
-import Client from './components/Client';
+import StudentPage from './components/StudentPage';
 
 export const AppWrapper = styled.div`
   position: relative;
@@ -49,7 +48,7 @@ const App: React.FC = () => {
           {/* Các route không có Header */}
           <Route path="/" element={<HomePage />} />
           <Route path={pathConstants.LOGIN} element={<LoginPage />} />
-          <Route path={pathConstants.CLIENT} element={<Client />} />
+          <Route path={pathConstants.STUDENT_PAGE} element={<StudentPage />} />
 
           {/* Các route có Header - được khai báo trong AppWithHeader */}
           <Route path={pathConstants.MATCH_WORD_MEANING} element={<AppWithHeader><MatchWordMeaning /></AppWithHeader>} />

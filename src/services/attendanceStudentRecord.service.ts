@@ -3,7 +3,7 @@ import { authHeader } from '../helpers';
 const getByMonth = async (year: number, month: number) => {
   const requestOptions = {
     method: 'GET',
-    headers: authHeader(),
+    headers: {...authHeader(), "ngrok-skip-browser-warning": "69420"},
   };
 
   // Thêm `year` và `month` vào đường dẫn API

@@ -159,9 +159,9 @@ const AttendanceManage: React.FC = () => {
       
       if (isEditing && attendanceSessionToEdit) {
         // Lấy danh sách học sinh được chọn từ attendanceSessionToEdit (chỉ khi đang sửa)
-        const studentsInSession = currentMonthAttendanceStudentRecords.filter(
+        const studentsInSession = currentMonthAttendanceStudentRecords ? currentMonthAttendanceStudentRecords.filter(
           (record: any) => record.sessionId === attendanceSessionToEdit.id
-        );
+        ): [];
   
         const selectedStudentIds = studentsInSession
           .filter((record: any) => record.isPresent === true)
@@ -243,9 +243,9 @@ const AttendanceManage: React.FC = () => {
     setSelectedDate(new Date(session.date).toISOString().split('T')[0]);
 
     // Lọc ra những học sinh đã có mặt trong session này
-    const studentsInSession = currentMonthAttendanceStudentRecords.filter(
+    const studentsInSession = currentMonthAttendanceStudentRecords ? currentMonthAttendanceStudentRecords.filter(
       (record: any) => record.sessionId === session.id
-    );
+    ) : [];
   
     // Tạo danh sách học sinh có mặt (dựa trên trường isPresent)
     const selectedStudentIds = studentsInSession

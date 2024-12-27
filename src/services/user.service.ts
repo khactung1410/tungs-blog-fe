@@ -76,7 +76,7 @@ export const userService = {
 function getAll() {
   const requestOptions = {
     method: 'GET',
-    headers: authHeader()
+    headers: {...authHeader(), "ngrok-skip-browser-warning": "69420"},
   };
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/`, requestOptions).then(handleResponse);
@@ -85,7 +85,7 @@ function getAll() {
 function getById(id: any) {
   const requestOptions = {
     method: 'GET',
-    headers: authHeader()
+    headers: {...authHeader(), "ngrok-skip-browser-warning": "69420"},
   };
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/teachers/${id}`, requestOptions)

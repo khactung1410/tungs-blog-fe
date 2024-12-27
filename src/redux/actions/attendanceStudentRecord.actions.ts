@@ -26,8 +26,9 @@ interface AttendanceSessionAttributes {
         const attendanceStudentRecords = await attendanceStudentRecordService.getByMonth(year, month);
         dispatch(success(attendanceStudentRecords));
       } catch (error: any) {
+        console.log(error)
         dispatch(failure(error.toString()));
-        dispatch(notificationActions.addNotification(error.toString(), 'DANGER'));
+        dispatch(notificationActions.addNotification('dòng 30' + error.toString(), 'DANGER'));
       }
     };
   };

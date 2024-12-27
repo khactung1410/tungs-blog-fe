@@ -4,7 +4,7 @@ import { authHeader } from '../helpers';
 const getAll = () => {
   const requestOptions = {
     method: 'GET',
-    headers: authHeader() // Sử dụng authHeader() để lấy accessToken
+    headers: {...authHeader(), "ngrok-skip-browser-warning": "69420"},
   };
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/classes/`, requestOptions)
@@ -17,7 +17,7 @@ const getAll = () => {
 const create = (classObj: any) => {
   const requestOptions = {
     method: 'POST',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    headers: { ...authHeader(), 'Content-Type': 'application/json', "ngrok-skip-browser-warning": "69420" },
     body: JSON.stringify({ ...classObj })
   };
 
@@ -27,7 +27,7 @@ const create = (classObj: any) => {
 const update = (classObj: any) => {
   const requestOptions = {
     method: 'PUT',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    headers: { ...authHeader(), 'Content-Type': 'application/json', "ngrok-skip-browser-warning": "69420" },
     body: JSON.stringify({ ...classObj })
   };
 
@@ -37,7 +37,7 @@ const update = (classObj: any) => {
 const remove = (classId: number) => {
   const requestOptions = {
     method: 'DELETE',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    headers: { ...authHeader(), 'Content-Type': 'application/json', "ngrok-skip-browser-warning": "69420" },
   };
 
   return fetch(`${process.env.REACT_APP_API_URL}/api/classes/${classId}`, requestOptions).then(handleResponse);

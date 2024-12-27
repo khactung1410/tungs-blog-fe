@@ -3,7 +3,7 @@ import { authHeader } from '../helpers';
 const getAll = async () => {
   const requestOptions = {
     method: 'GET',
-    headers: authHeader(),
+    headers: {...authHeader(), "ngrok-skip-browser-warning": "69420"},
   };
 
   const response = await fetch(`${process.env.REACT_APP_API_URL}/api/question_types/`, requestOptions);

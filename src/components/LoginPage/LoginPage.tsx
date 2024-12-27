@@ -38,11 +38,14 @@ const LoginPage: React.FC = () => {
         await dispatch(userActions.login(userName, password));  // Dispatch login action
         // Sau khi login thành công, navigate tới trang phù hợp
         const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
-        if (userInfo.role === 0 || userInfo.role === 1) {
+        if (userInfo.role === 0 || userInfo.role === 1) { // admin hoặc giáo viên đăng nhập
           navigate(pathConstants.FLASHCARD_PDF_CREATE
           );  // Redirect to FlashCard PDF page
+        } 
+        if (userInfo.role === 2) {
+          navigate(pathConstants.STUDENT_PAGE);
         } else {
-          navigate(pathConstants.CLIENT);  // Redirect to student's page
+          navigate(pathConstants.ROOT);  // Redirect to ROOT page
         }
       } catch (error) {
         console.error('Login failed', error);

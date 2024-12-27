@@ -360,11 +360,13 @@ const StudentsManage: React.FC = () => {
             <ConfirmationPopup
                 isOpen={showDeletePopup}
                 onClose={() => setShowDeletePopup(false)}
-                title={`Xác nhận xóa học sinh: ${studentToDelete?.name} - id: ${studentToDelete?.classId}`}
+                title={`Xác nhận xóa học sinh: ${studentToDelete?.name} - id: ${studentToDelete?.id}`}
                 message={
                     <>
-                        Lưu ý: Khi Xóa, học sinh này chỉ xóa trong Database, vẫn sẽ còn trong file Excel!<br />
-                        Link file excel: <a href="https://docs.google.com/spreadsheets/d/1vf--cgdKLupf1nLHySAazN2RvTZtfF9EwphoJ7BaB0A/edit?gid=1525671082#gid=1525671082" target="_blank">Nhấn vào đây để xem file Excel</a>
+                        Khi xóa học sinh này:<br />
+                        - Xóa tất cả điểm danh của học sinh (trong bảng attendanceStudentRecord) <br />
+                        - Xóa thông tin học sinh trong <a href="https://docs.google.com/spreadsheets/d/1vf--cgdKLupf1nLHySAazN2RvTZtfF9EwphoJ7BaB0A/edit?gid=1525671082#gid=1525671082" target="_blank">file Excel</a><br />
+                        - Xóa thông tin học sinh trong database (trong bảng students) <br />
                     </>
                 }
                 onConfirm={() => handleDeleteStudent(studentToDelete?.id)}
@@ -375,7 +377,14 @@ const StudentsManage: React.FC = () => {
                 isOpen={showUpdatePopup}
                 onClose={() => setShowUpdatePopup(false)}
                 title="Xác nhận cập nhật học sinh từ file Excel"
-                message="Bạn muốn cập nhật danh sách học sinh từ file Excel? Thao tác này không thể hoàn tác."
+                message={
+                  <>
+                      Khi cập nhật danh sách học sinh từ file Excel:<br />
+                      - Lấy tất cả id học sinh trong <a href="https://docs.google.com/spreadsheets/d/1vf--cgdKLupf1nLHySAazN2RvTZtfF9EwphoJ7BaB0A/edit?gid=1525671082#gid=1525671082" target="_blank">file Excel</a> và trong database <br />
+                      - id nào chưa có trong database thì thêm mới học sinh đó vào DB, có rồi thì chỉ update thông tin từ sheet sang DB <br/>
+                      - id học sinh nào mà có trong DB mà lại không có trong sheet, thì xóa học sinh đó trong DB, và xóa thông tin điểm danh trong bảng attendanceStudentRecords<br />
+                  </>
+              }
                 onConfirm={() => handleUpdateStudentListFromExcel()}
             />
       )}

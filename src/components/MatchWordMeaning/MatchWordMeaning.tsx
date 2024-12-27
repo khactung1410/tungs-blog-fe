@@ -173,6 +173,7 @@ const WordMatchingGame: React.FC = () => {
               <ButtonContainer>
                 <StyledButton
                   onClick={openRandomTeamPage}
+                  hidden={textareaHidden}
                   style={{ backgroundColor: '#007bff', marginBottom: '10px' }}
                 >
                   Chia Đội

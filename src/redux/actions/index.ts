@@ -6,3 +6,4 @@ export * from './flashcard.actions';
 export * from './questionType.actions';
 export * from './questionTopic.actions';
 export * from './attendanceSession.actions';
+export * from './attendanceStudentRecord.actions';

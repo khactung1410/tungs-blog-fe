@@ -101,6 +101,14 @@ const Header: React.FC = () => {
             )}
             {userInfo?.role === 0 && (  // Chỉ có role admin (role=0) mới có quyền tạo giáo viên mới (giáo viên mặc định role=2)
               <NavItem
+                isactive={activePath === pathConstants.TUITION_MANAGE}
+                onClick={() => handleNavClick(pathConstants.TUITION_MANAGE)}
+              >
+                Học Phí
+              </NavItem>
+            )}
+            {userInfo?.role === 0 && (  // Chỉ có role admin (role=0) mới có quyền tạo giáo viên mới (giáo viên mặc định role=2)
+              <NavItem
               isactive={activePath === pathConstants.SIGNUP}
                 onClick={() => handleNavClick(pathConstants.SIGNUP)}
               >

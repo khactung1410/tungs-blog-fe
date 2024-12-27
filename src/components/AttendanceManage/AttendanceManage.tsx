@@ -164,8 +164,6 @@ const AttendanceManage: React.FC = () => {
         console.error('Error loading data:', err);
         setIsLoading(false);
       });
-    
-    
   }, [dispatch]);
 
   // useEffect mới để reset selectedStudents khi lớp thay đổi

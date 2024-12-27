@@ -5,6 +5,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { classActions, studentActions } from '../../redux/actions';
 
+export const Wrapper = styled.div`
+  padding: 20px;
+  margin-left: 250px; //cách lề trái để tránh bị Header che mất.
+`;
+
 // Styled-components cho custom styling
 const Textarea = styled.textarea`
   width: 100%;
@@ -106,7 +111,7 @@ const RandomTeamPage: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Wrapper>
       <Row>
         {/* Cột bên trái: Các trường nhập liệu */}
         <Col md={6}>
@@ -202,7 +207,7 @@ const RandomTeamPage: React.FC = () => {
           )}
         </Col>
       </Row>
-    </Container>
+    </Wrapper>
   );
 };
 

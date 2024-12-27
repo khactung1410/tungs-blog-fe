@@ -21,6 +21,7 @@ import StudentInformation from './components/StudentsManage/StudentInformation';
 import QuestionsManage from './components/QuestionsManage';
 import AttendanceManage from './components/AttendanceManage/AttendanceManage';
 import StudentPage from './components/StudentPage';
+import TuitionManage from './components/TuitionManage';
 
 export const AppWrapper = styled.div`
   position: relative;
@@ -59,6 +60,7 @@ const App: React.FC = () => {
           <Route path={pathConstants.RANDOM_TEAM} element={<AppWithHeader><RandomTeamPage /></AppWithHeader>} />
           <Route path={pathConstants.FLASHCARD_PDF_CREATE} element={<AppWithHeader><FlashCardPDF /></AppWithHeader>} />
           <Route path={pathConstants.ATTENDANCE_MANAGE} element={<AppWithHeader><AttendanceManage /></AppWithHeader>} />
+          <Route path={pathConstants.TUITION_MANAGE} element={<AppWithHeader><TuitionManage /></AppWithHeader>} />
           <Route path={pathConstants.SIGNUP} element={<AppWithHeader><SignupPage /></AppWithHeader>} />
         </Routes>
       </AppWrapper>

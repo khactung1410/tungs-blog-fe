@@ -41,11 +41,12 @@ const LoginPage: React.FC = () => {
         if (userInfo.role === 0 || userInfo.role === 1) { // admin hoặc giáo viên đăng nhập
           navigate(pathConstants.FLASHCARD_PDF_CREATE
           );  // Redirect to FlashCard PDF page
-        } 
-        if (userInfo.role === 2) {
-          navigate(pathConstants.STUDENT_PAGE);
         } else {
-          navigate(pathConstants.ROOT);  // Redirect to ROOT page
+          if (userInfo.role === 2) { // học sinh login
+            navigate(pathConstants.STUDENT_PAGE);
+          } else {
+            navigate(pathConstants.ROOT);  // Redirect to ROOT page
+          }
         }
       } catch (error) {
         console.error('Login failed', error);

@@ -101,6 +101,22 @@ const AttendanceManage: React.FC = () => {
     navigate(pathConstants.ROOT);
   };
 
+
+  const calculateAttendanceSummary = () => {
+    const totalStudents = filteredStudents.length;
+    const presentStudents = selectedStudents.length;
+    const absentStudents = filteredStudents
+      .filter((student) => !selectedStudents.includes(student.id))
+      .map((student) => student.name); // Lấy tên học sinh vắng
+    
+    return {
+      totalStudents,
+      presentStudents,
+      absentStudents,
+    };
+  };
+  
+
   // Kiểm tra accessToken hết hạn
   const isTokenExpired = (token: string | null) => {
     if (!token) return true; // Nếu không có token, coi như đã hết hạn
@@ -469,13 +485,13 @@ const AttendanceManage: React.FC = () => {
                 </div>
               )}
             </div>
-
+            
             {/* Bảng chọn học sinh */}
             <ScrollableTableWrapper>
               <StyledTable>
                 <thead>
                   <tr>
-                    <th style={{ width: '50px' }}>
+                    <th style={{ width: '100px' }}>
                       <div style={{ textAlign: 'center' }}>
                         <Label style={{ display: 'block' }}>Chọn tất cả</Label>
                         <Input
@@ -506,11 +522,10 @@ const AttendanceManage: React.FC = () => {
                             type="checkbox"
                             checked={selectedStudents.includes(student.id)}
                             onChange={(e) => {
-                              if (e.target.checked) {
-                                setSelectedStudents([...selectedStudents, student.id]);
-                              } else {
-                                setSelectedStudents(selectedStudents.filter((id) => id !== student.id));
-                              }
+                              const updatedSelectedStudents = e.target.checked
+                                ? [...selectedStudents, student.id]
+                                : selectedStudents.filter((id) => id !== student.id);
+                              setSelectedStudents(updatedSelectedStudents);
                             }}
                           />
                         </td>
@@ -535,6 +550,20 @@ const AttendanceManage: React.FC = () => {
           </ModalContent>
         </ModalBody>
         <ModalFooter>
+        <div style={{ marginBottom: '15px' }}>
+          {(() => {
+            const { totalStudents, presentStudents, absentStudents } = calculateAttendanceSummary();
+            return (
+              <>
+                <p>
+                <strong style={{ color: 'blue', fontSize: '15px' }}>Đi: {presentStudents}/{totalStudents} - </strong> 
+                  <strong style={{ color: 'red', fontSize: '15px' }}>Vắng: {totalStudents - presentStudents} {absentStudents.length > 0 && ` (${absentStudents.join(', ')})`}</strong>
+                  
+                </p>
+              </>
+            );
+          })()}
+        </div>
           <Button 
             color="primary" 
             onClick={attendanceSessionToEdit ? handleSaveAttendance : handleCreateAttendance}

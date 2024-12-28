@@ -23,6 +23,7 @@ const TuitionContainer = styled.div`
   margin-left: 250px; //cách lề trái để tránh bị Header che mất.
 `;
 interface FeeResult {
+  absenceDates: any;
   student: any; // Thay `any` bằng kiểu chính xác nếu có
   absencesLastMonth: number;
   feePerSession: number;
@@ -62,6 +63,7 @@ const TuitionManage: React.FC = () => {
     setIsLoading(true);
     const currentYear = new Date().getFullYear();
     const previousMonth = new Date().getMonth();
+    console.log('previousMonth', previousMonth)
     Promise.all([
       dispatch(classActions.getAll()),
       dispatch(studentActions.getAll()),
@@ -115,36 +117,43 @@ const TuitionManage: React.FC = () => {
       const student = students.find((s: any) => s.id === studentId);
       const studentClass = classes.find((cls: any) => cls.id === student?.classId);
       const feePerSession = studentClass ? studentClass.sessionFee : 0;
-
-      // Tính số buổi nghỉ tháng trước (là tháng 11 nếu hiện tại là tháng 12)
-      const absencesLastMonth = previousMonthAttendanceStudentRecords.filter(
+  
+      // Lấy danh sách các ngày nghỉ
+      const absences = previousMonthAttendanceStudentRecords.filter(
         (record: any) =>
           record.studentId === student?.id &&
-          record.isPresent === 0 &&
+          record.isPresent === false &&
           attendanceSessions.some(
             (session: any) =>
               session.id === record.sessionId &&
-              new Date(session.date).getMonth() === (new Date().getMonth() - 1) // Tháng trước
+              new Date(session.date).getMonth() === new Date().getMonth() - 1 // Tháng trước
           )
-      ).length;
-
-
-
-      // Học phí tháng này
+      );
+  
+      // Danh sách ngày nghỉ (dạng ngày/tháng)
+      const absenceDates = absences.map((absence: any) => {
+        const session = attendanceSessions.find((s: any) => s.id === absence.sessionId);
+        return session
+          ? new Date(session.date).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }).replace('-', '/')
+          : '';
+      });
+  
+      const absencesLastMonth = absenceDates.length;
       const currentMonthFee = sessionsThisMonth * feePerSession;
       const lastMonthAbsenceFee = absencesLastMonth * feePerSession;
       const totalFee = currentMonthFee - lastMonthAbsenceFee;
-
+  
       return {
         student,
         absencesLastMonth,
+        absenceDates, // <-- Thêm danh sách ngày nghỉ
         feePerSession,
         currentMonthFee,
         lastMonthAbsenceFee,
         totalFee,
       };
     });
-
+  
     setAttendanceFee(results);
   };
 
@@ -170,6 +179,10 @@ const TuitionManage: React.FC = () => {
     ];
     return months[previousMonth.getMonth()];
   };
+
+  const formatCurrency = (amount: number) => {
+    return amount.toLocaleString('vi-VN'); // Định dạng số theo chuẩn Việt Nam
+  };  
 
   return (
     <TuitionContainer>
@@ -273,50 +286,69 @@ const TuitionManage: React.FC = () => {
             Tính học phí
           </Button>
           {attendanceFee.length > 0 && (
-            attendanceFee.map((fee, index) => (
-              <>
-              <p style={{ color: 'Blue', fontWeight: 'bold' }}>Học phí {getMonthName(attendanceTo)}: {fee.student.name}</p>
-              <Table bordered>
-                <thead>
-                  <tr>
-                    <th>Nội dung</th>
-                    <th>Số buổi</th>
-                    <th>Học phí 1 buổi</th>
-                    <th>Số tiền</th>
-                  </tr>
-                </thead>
-                <tbody>
+            attendanceFee.map((fee, index) => {
+              const studentClass = classes.find(
+                (cls: any) => cls.id === fee.student?.classId
+              );
+              return (
+                <React.Fragment key={index}>
+                  {/* Hiển thị tên lớp */}
+                  <span style={{ color: 'green', fontWeight: 'bold', display: 'block' }}>
+                    Lớp: {studentClass ? studentClass.name : "Không xác định"}
+                  </span>
                   
-                    <React.Fragment key={index}>
+                  {/* Hiển thị học phí */}
+                  <p style={{ color: 'blue', fontWeight: 'bold' }}>
+                    Học phí Tiếng Anh {getMonthName(attendanceTo)}: {fee.student ? fee.student.name : ""}
+                  </p>
+                  
+                  <Table bordered>
+                    <thead>
                       <tr>
-                        <td>Số buổi nghỉ {getPreviousMonthName(attendanceFrom)}</td>
-                        <td>{fee.absencesLastMonth}</td>
-                        <td>{fee.feePerSession}</td>
+                        <th>Nội dung</th>
+                        <th>Số buổi</th>
+                        <th>Học phí 1 buổi</th>
+                        <th>Số tiền</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Số buổi <strong>nghỉ</strong> {getPreviousMonthName(attendanceFrom)}</td>
+                        <td>{fee.absencesLastMonth}
+                            <br />
+                            {fee.absenceDates.length > 0 && (
+                              <small>(Nghỉ {fee.absenceDates.join('; ')})</small>
+                            )}
+                        </td>
+                        <td>{formatCurrency(fee.feePerSession)}</td>
                         <td>
-                          {fee.absencesLastMonth} x {fee.feePerSession} = {fee.lastMonthAbsenceFee}
+                          {fee.absencesLastMonth} x {formatCurrency(fee.feePerSession)} = {formatCurrency(fee.lastMonthAbsenceFee)}
                         </td>
                       </tr>
                       <tr>
                         <td>Số buổi học {getMonthName(attendanceTo)}</td>
                         <td>{sessionsThisMonth}</td>
-                        <td>{fee.feePerSession}</td>
+                        <td>{formatCurrency(fee.feePerSession)}</td>
                         <td>
-                          {sessionsThisMonth} x {fee.feePerSession} = {fee.currentMonthFee}
+                          {sessionsThisMonth} x {formatCurrency(fee.feePerSession)} = {formatCurrency(fee.currentMonthFee)}
                         </td>
                       </tr>
                       <tr>
-                        <td colSpan={4} style={{ color: 'red', fontWeight: 'bold' }}>
-                          Tổng học phí: {fee.currentMonthFee} - {fee.lastMonthAbsenceFee} = {fee.totalFee}
+                        <td colSpan={3}></td>
+                        <td colSpan={1}>
+                          = {formatCurrency(fee.currentMonthFee)} - {formatCurrency(fee.lastMonthAbsenceFee)}
+                          <span style={{ color: 'red', fontWeight: 'bold', display: 'block' }}>
+                            Tổng học phí: {formatCurrency(fee.totalFee)}
+                          </span>
                         </td>
                       </tr>
-                    </React.Fragment>
-                  
-                </tbody>
-              </Table>
-              </>
-            ))
-            
+                    </tbody>
+                  </Table>
+                </React.Fragment>
+              );
+            })
           )}
+
         </>
       )}
     </TuitionContainer>

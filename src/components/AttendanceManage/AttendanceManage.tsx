@@ -48,8 +48,8 @@ interface AttendanceSessionAttributes {
   createdByTeacherId: number;
   lastUpdatedByTeacherId: number;
   note?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const AttendanceManage: React.FC = () => {
@@ -194,8 +194,8 @@ const AttendanceManage: React.FC = () => {
   
 
   const filteredSessions = 
-   Array.isArray(attendanceSessions) && attendanceSessions.length > 0 ? 
-   attendanceSessions.filter((session: AttendanceSessionAttributes) => {
+  Array.isArray(attendanceSessions) && attendanceSessions.length > 0 ? 
+  attendanceSessions.filter((session: AttendanceSessionAttributes) => {
     const sessionMonth = new Date(session.date).getMonth() + 1;
     const isClassMatch = selectedClass ? session.classId === Number(selectedClass) : true;
     const isMonthMatch = sessionMonth === selectedMonth;
@@ -210,8 +210,17 @@ const AttendanceManage: React.FC = () => {
     const diffA = Math.abs(dateA.getTime() - today.getTime());
     const diffB = Math.abs(dateB.getTime() - today.getTime());
 
-    return diffA - diffB; // Sắp xếp theo khoảng cách thời gian đến ngày hiện tại
-  }): [];
+    // Nếu `date` khác nhau, sắp xếp theo khoảng cách thời gian đến ngày hiện tại
+    if (diffA !== diffB) {
+      return diffA - diffB;
+    }
+
+    // Nếu `date` giống nhau, sắp xếp theo `createdAt` giảm dần
+    const createdAtA = new Date(a.createdAt).getTime();
+    const createdAtB = new Date(b.createdAt).getTime();
+    return createdAtB - createdAtA;
+  }) : [];
+
 
   const resetModalState = () => {
     setSelectedClass('');

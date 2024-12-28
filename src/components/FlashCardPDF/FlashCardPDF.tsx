@@ -63,10 +63,17 @@ const FlashCardPDF: React.FC = () => {
   }
   };
 
-  const handleVocabTest = (event: React.FormEvent) => {
+  const handleVocabTest = async (event: React.FormEvent) => {
     event.preventDefault();
     if (text.trim() !== '' && invalidLines.length === 0) {
-      dispatch(downloadVocabTest({ vocabs: text, withPhonics: withWordPhonics, numberOfStudents }));
+      setIsLoading(true); // Set isLoadingPDF=true khi bắt đầu
+      try {
+        await dispatch(downloadVocabTest({ vocabs: text, withPhonics: withWordPhonics, numberOfStudents }));
+      } catch (error) {
+        console.error("Error dispatching vocab test", error);
+      } finally {
+        setIsLoading(false); // Set isLoadingPDF=false khi xong
+      }
     }
   };
 

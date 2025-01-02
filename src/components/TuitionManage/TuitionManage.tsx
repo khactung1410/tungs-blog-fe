@@ -22,6 +22,13 @@ const TuitionContainer = styled.div`
   padding: 20px;
   margin-left: 250px; //cách lề trái để tránh bị Header che mất.
 `;
+const StyledTable = styled(Table)`
+  border: 0.8px solid #000 !important; /* Tăng độ đậm của viền */
+  th,
+  td {
+    border: 0.8px solid #000 !important; /* Tăng độ đậm viền các ô */
+  }
+`;
 interface FeeResult {
   absenceDates: any;
   student: any; // Thay `any` bằng kiểu chính xác nếu có
@@ -39,6 +46,7 @@ const TuitionManage: React.FC = () => {
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [selectedClass, setSelectedClass] = useState('');
   const [attendanceFee, setAttendanceFee] = useState<FeeResult[]>([]);
+  const [isMultiStudent, setIsMultiStudent] = useState(false);
 
   const students = useSelector((state: any) => state.students.studentsList);
   const classes = useSelector((state: any) => state.classes.classesList);
@@ -56,21 +64,21 @@ const TuitionManage: React.FC = () => {
     new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().slice(0, 10) // Ngày cuối tháng hiện tại
   );
   
-  
   const [sessionsThisMonth, setSessionsThisMonth] = useState(8);
 
   useEffect(() => {
     setIsLoading(true);
+    const currentMonth = new Date().getMonth() + 1;
+    const previousMonth = currentMonth == 1 ? 12 : new Date().getMonth() ; //nếu hiện tại tháng 1 thì trả về Previous là 12, còn lại trả về đúng Previous luôn
     const currentYear = new Date().getFullYear();
-    const previousMonth = new Date().getMonth();
-    console.log('previousMonth', previousMonth)
+    const yearToCountTuition = currentMonth == 1 ? currentYear - 1 : currentYear;
     Promise.all([
       dispatch(classActions.getAll()),
       dispatch(studentActions.getAll()),
       dispatch(attendanceActions.getAllAttendanceSessions()),
       dispatch(
         attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(
-          currentYear,
+          yearToCountTuition,
           previousMonth
         )
       ),
@@ -86,39 +94,77 @@ const TuitionManage: React.FC = () => {
 
   const handleStudentSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedValue = e.target.value;
-
+  
     if (selectedValue === "all") {
       // Chọn tất cả học sinh
       setSelectedStudents(students.map((student: { id: string }) => student.id));
+    } else if (isMultiStudent) {
+      // Thêm học sinh vào danh sách khi checkbox được chọn
+      setSelectedStudents((prev) => [...prev, selectedValue]);
     } else {
-      // Chỉ chọn 1 học sinh
+      // Chỉ chọn 1 học sinh khi checkbox không được chọn
       setSelectedStudents([selectedValue]);
     }
-  };
+  };  
 
   const handleClassSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedClassId = e.target.value;
     setSelectedClass(selectedClassId);
-    
-    // Filter students based on selected class
-    if (selectedClassId === '') {
-      setSelectedStudents(students.map((student: { id: string }) => student.id)); // Show all students
+  
+    if (!isMultiStudent) {
+      // Nếu checkbox không được check, thêm tất cả học sinh của lớp vào selectedStudents
+      if (selectedClassId === '') {
+        setSelectedStudents(students.map((student: { id: string }) => student.id)); // Show all students
+      } else {
+        setSelectedStudents(
+          students
+            .filter((student: { classId: string }) => student.classId == selectedClassId)
+            .map((student: { id: string }) => student.id)
+        );
+      }
     } else {
-      setSelectedStudents(
-        students
-          .filter((student: { classId: string }) => student.classId === selectedClassId)
-          .map((student: { id: string }) => student.id)
-      );
+      // Nếu checkbox được check, không làm gì cả
+      console.log("Checkbox 'Tính cho nhiều học sinh' được check - Không cập nhật selectedStudents");
     }
+  };
+  const getSessionsThisMonth = (classId: string): number => {// hàm trả về số buổi học của tháng này dựa vào id lớp
+    console.log(classId)
+    const sessions: { [key: string]: number } = {
+      '0': 6, //0A
+      '1': 6, //1A
+      '2': 6, //1B
+      '3': 6, //1C
+      '4': 6, //2A
+      '5': 6, //2B
+      '6': 6, //2C
+      '7': 6, //3A
+      '8': 6, //3B
+      '9': 6, //4A
+      '10': 6, //4B
+      '11': 6, //4D
+      '12': 6, //5A
+      '13': 6, //5B
+      '14': 7, //6A
+      '15': 6, //6B
+      '16': 6, //7A
+      '17': 6, //8A
+      '18': 6, //9A
+      '19': 6, //3C
+    };
+    return sessions[classId];
   };
 
   const handleCalculateFee = () => {
     const results = selectedStudents.map((studentId: string) => {
-      const student = students.find((s: any) => s.id === studentId);
-      const studentClass = classes.find((cls: any) => cls.id === student?.classId);
-      const feePerSession = studentClass ? studentClass.sessionFee : 0;
+      const student = students.find((s: any) => s.id == studentId);
+      const studentClass = classes.find((cls: any) => cls.id == student?.classId);
+      const feePerSession = studentClass.sessionFee;
   
       // Lấy danh sách các ngày nghỉ
+      const currentMonth = new Date().getMonth() + 1;
+      const previousMonth = currentMonth == 1 ? 12 : new Date().getMonth() ; //nếu hiện tại tháng 1 thì trả về Previous là 12, còn lại trả về đúng Previous luôn
+      const currentYear = new Date().getFullYear();
+      const yearToCountTuition = currentMonth == 1 ? currentYear - 1 : currentYear;
       const absences = previousMonthAttendanceStudentRecords.filter(
         (record: any) =>
           record.studentId === student?.id &&
@@ -126,20 +172,21 @@ const TuitionManage: React.FC = () => {
           attendanceSessions.some(
             (session: any) =>
               session.id === record.sessionId &&
-              new Date(session.date).getMonth() === new Date().getMonth() - 1 // Tháng trước
+              new Date(session.date).getFullYear() === yearToCountTuition && // Kiểm tra năm
+              new Date(session.date).getMonth() + 1 === previousMonth // Kiểm tra tháng
           )
       );
   
       // Danh sách ngày nghỉ (dạng ngày/tháng)
       const absenceDates = absences.map((absence: any) => {
-        const session = attendanceSessions.find((s: any) => s.id === absence.sessionId);
+        const session = attendanceSessions.find((s: any) => s.id == absence.sessionId);
         return session
           ? new Date(session.date).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }).replace('-', '/')
           : '';
       });
   
       const absencesLastMonth = absenceDates.length;
-      const currentMonthFee = sessionsThisMonth * feePerSession;
+      const currentMonthFee = getSessionsThisMonth(studentClass.id) * feePerSession ;
       const lastMonthAbsenceFee = absencesLastMonth * feePerSession;
       const totalFee = currentMonthFee - lastMonthAbsenceFee;
   
@@ -155,10 +202,6 @@ const TuitionManage: React.FC = () => {
     });
   
     setAttendanceFee(results);
-  };
-
-  const handleSelectAllStudents = () => {
-    setSelectedStudents(students.map((student: { id: any }) => student.id));
   };
 
   const getMonthName = (date: string) => {
@@ -227,7 +270,20 @@ const TuitionManage: React.FC = () => {
             </Col>
           </Row>
           <Row>
-            <Col md={6}>
+            <Col>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="checkbox"
+                    id="multiStudentCheckbox"
+                    onChange={(e) => setIsMultiStudent(e.target.checked)}
+                    checked={isMultiStudent} // Trạng thái mặc định là không chọn
+                  />
+                  Tính cho nhiều học sinh
+                </Label>
+              </FormGroup>
+            </Col>
+            <Col md={3}>
               <FormGroup>
                 <Label for="classSelection">Chọn lớp</Label>
                 <Input
@@ -244,7 +300,7 @@ const TuitionManage: React.FC = () => {
                 </Input>
               </FormGroup>
             </Col>
-            <Col md={6}>
+            <Col md={3}>
               <FormGroup>
                 <Label for="studentSelection">Tên các học sinh</Label>
                 <Input
@@ -256,7 +312,7 @@ const TuitionManage: React.FC = () => {
                   <option value="all">Tất cả học sinh</option>
                   {students
                     .filter((student: { classId: string }) =>
-                      selectedClass ? student.classId === selectedClass : true
+                      selectedClass ? student.classId == selectedClass : true
                     )
                     .map((student: { id: string; name: string }) => (
                       <option key={student.id} value={student.id}>
@@ -265,13 +321,15 @@ const TuitionManage: React.FC = () => {
                     ))}
                 </Input>
               </FormGroup>
-              <div>
+            </Col>
+            <Col md={3}>
+            <div>
                 <strong>Học sinh đã chọn:</strong>{" "}
                 {selectedStudents.length > 0 ? (
                   <ul>
                     {selectedStudents.map((studentId) => {
                       const student = students.find(
-                        (stu: { id: string }) => stu.id === studentId
+                        (stu: { id: string }) => stu.id == studentId
                       );
                       return student ? (student.name + ',') : null;
                     })}
@@ -281,6 +339,7 @@ const TuitionManage: React.FC = () => {
                 )}
               </div>
             </Col>
+
           </Row>
           <Button color="success" onClick={handleCalculateFee}>
             Tính học phí
@@ -292,20 +351,14 @@ const TuitionManage: React.FC = () => {
               );
               return (
                 <React.Fragment key={index}>
-                  {/* Hiển thị tên lớp */}
-                  <span style={{ color: 'green', fontWeight: 'bold', display: 'block' }}>
-                    Lớp: {studentClass ? studentClass.name : "Không xác định"}
-                  </span>
-                  
-                  {/* Hiển thị học phí */}
-                  <p style={{ color: 'blue', fontWeight: 'bold' }}>
-                    Học phí Tiếng Anh {getMonthName(attendanceTo)}: {fee.student ? fee.student.name : ""}
-                  </p>
-                  
-                  <Table bordered>
+                  <StyledTable bordered>
                     <thead>
                       <tr>
-                        <th>Nội dung</th>
+                        <th>Nội dung: {' '} 
+                          <span style={{ color: 'blue', fontWeight: 'bold' }}>
+                            HP Tiếng Anh {getMonthName(attendanceTo)}: {fee.student ? fee.student.name : ""}
+                          </span>
+                        </th>
                         <th>Số buổi</th>
                         <th>Học phí 1 buổi</th>
                         <th>Số tiền</th>
@@ -327,30 +380,84 @@ const TuitionManage: React.FC = () => {
                       </tr>
                       <tr>
                         <td>Số buổi học {getMonthName(attendanceTo)}</td>
-                        <td>{sessionsThisMonth}</td>
+                        <td>{getSessionsThisMonth(studentClass.id)}</td>
                         <td>{formatCurrency(fee.feePerSession)}</td>
                         <td>
-                          {sessionsThisMonth} x {formatCurrency(fee.feePerSession)} = {formatCurrency(fee.currentMonthFee)}
+                          {getSessionsThisMonth(studentClass.id)} x {formatCurrency(fee.feePerSession)} = {formatCurrency(fee.currentMonthFee)}
                         </td>
                       </tr>
-                      <tr>
+                      {!isMultiStudent && (<tr>
                         <td colSpan={3}></td>
                         <td colSpan={1}>
                           = {formatCurrency(fee.currentMonthFee)} - {formatCurrency(fee.lastMonthAbsenceFee)}
                           <span style={{ color: 'red', fontWeight: 'bold', display: 'block' }}>
-                            Tổng học phí: {formatCurrency(fee.totalFee)}
+                            TỔNG HỌC PHÍ: {formatCurrency(fee.totalFee)}
                           </span>
                         </td>
-                      </tr>
+                      </tr>)}
                     </tbody>
-                  </Table>
+                  </StyledTable>
+                  {/* Hiển thị đoạn văn bản nếu isMultiStudent = false */}
+                  {!isMultiStudent && (
+                              <>
+                                <span style={{ display: 'block' }}>
+                                  <i>*Phụ huynh có thể chuyển khoản (Và gửi ảnh chuyển khoản):</i>
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                  <i>     STK: 02047318001 (DUONG KHAC TUNG - Ngân hàng Tiên Phong Bank - TPBank)</i>
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                  <i>*Học phí thu chung đầu tháng, các buổi nghỉ tháng này sẽ được trừ vào học phí đầu tháng sau.</i>
+                                </span>
+                              </>
+                            )}
                 </React.Fragment>
               );
             })
           )}
-
         </>
       )}
+{isMultiStudent && (
+  <>
+    <Table bordered>
+      <tbody>
+        <tr>
+          {/* Cột 1: Tiêu đề "TỔNG HỌC PHÍ" */}
+          <td style={{ color: 'red', fontWeight: 'bold', verticalAlign: 'top' }}>
+            TỔNG HỌC PHÍ: {formatCurrency(
+              attendanceFee.reduce((acc, fee) => acc + fee.totalFee, 0)
+            )}
+          </td>
+
+          {/* Cột 2: Hiển thị phép tính học phí của từng học sinh */}
+          <td>
+            {attendanceFee.map((fee, index) => (
+              <div key={index}>
+                {formatCurrency(fee.currentMonthFee)} - {formatCurrency(fee.lastMonthAbsenceFee)} = {formatCurrency(fee.totalFee)}
+              </div>
+            ))}
+          </td>
+        </tr>
+      </tbody>
+    </Table>
+  </>
+)}
+
+
+      {/* Hiển thị đoạn văn bản nếu isMultiStudent = true */}
+      {isMultiStudent && (
+      <>
+        <span style={{ display: 'block' }}>
+          <i>*Phụ huynh có thể chuyển khoản (Và gửi ảnh chuyển khoản):</i>
+        </span>
+        <span style={{ display: 'block' }}>
+          <i>     STK: 02047318001 (DUONG KHAC TUNG - Ngân hàng Tiên Phong Bank - TPBank)</i>
+        </span>
+        <span style={{ display: 'block' }}>
+          <i>*Học phí thu chung đầu tháng, các buổi nghỉ tháng này sẽ được trừ vào học phí đầu tháng sau.</i>
+        </span>
+      </>
+    )}
     </TuitionContainer>
   );
 };

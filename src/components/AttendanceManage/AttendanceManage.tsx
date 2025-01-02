@@ -337,7 +337,8 @@ const AttendanceManage: React.FC = () => {
                 onChange={(e) => {
                   const newMonth = Number(e.target.value);
                   setSelectedMonth(newMonth);
-                  dispatch(attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(new Date().getFullYear(), newMonth));
+                  // dispatch(attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(new Date().getFullYear(), newMonth));
+                  dispatch(attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(2024, newMonth));
                 }}
               >
               {Array.from({ length: 12 }, (_, i) => (

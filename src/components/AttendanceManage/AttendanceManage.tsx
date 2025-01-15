@@ -58,6 +58,7 @@ const AttendanceManage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [searchText, setSearchText] = useState('');
   const [selectedStudents, setSelectedStudents] = useState<number[]>([]);
   const [isEditing, setIsEditing] = useState(false);  // Trạng thái modal: sửa hay tạo mới
@@ -77,6 +78,9 @@ const AttendanceManage: React.FC = () => {
   const teachers = useAppSelector((state: any) => state.users.items);
   const attendanceSessions = useAppSelector((state: any) => state.attendanceSessions.attendanceSessionsList);
   const currentMonthAttendanceStudentRecords = useAppSelector((state: any) => state.attendanceStudentRecords.attendanceStudentRecordsList);
+  
+  // Tạo danh sách các năm (năm hiện tại ± 2)
+  const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i);
 
   // Hàm kiểm tra trùng lặp
   const checkDuplicateSession = (classId: string, date: string) => {
@@ -100,7 +104,6 @@ const AttendanceManage: React.FC = () => {
     dispatch(userActions.logout());
     navigate(pathConstants.ROOT);
   };
-
 
   const calculateAttendanceSummary = () => {
     const totalStudents = filteredStudents.length;
@@ -197,10 +200,12 @@ const AttendanceManage: React.FC = () => {
   Array.isArray(attendanceSessions) && attendanceSessions.length > 0 ? 
   attendanceSessions.filter((session: AttendanceSessionAttributes) => {
     const sessionMonth = new Date(session.date).getMonth() + 1;
+    const sessionYear = new Date(session.date).getFullYear();
     const isClassMatch = selectedClass ? session.classId === Number(selectedClass) : true;
     const isMonthMatch = sessionMonth === selectedMonth;
+    const isYearMatch = sessionYear === selectedYear;
 
-    return isClassMatch && isMonthMatch;
+    return isClassMatch && isMonthMatch && isYearMatch;
   })
   .sort((a: AttendanceSessionAttributes, b: AttendanceSessionAttributes) => {
     const today = new Date();
@@ -337,13 +342,31 @@ const AttendanceManage: React.FC = () => {
                 onChange={(e) => {
                   const newMonth = Number(e.target.value);
                   setSelectedMonth(newMonth);
-                  // dispatch(attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(new Date().getFullYear(), newMonth));
-                  dispatch(attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(2024, newMonth));
+                  dispatch(attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(selectedYear, newMonth));
                 }}
               >
               {Array.from({ length: 12 }, (_, i) => (
                 <option key={i + 1} value={i + 1}>
                   Tháng {i + 1}
+                </option>
+              ))}
+            </Input>
+          </FormGroupStyled>
+          <FormGroupStyled>
+            <Label for="yearSelect">Năm</Label>
+            <Input
+              type="select"
+              id="yearSelect"
+              value={selectedYear}
+              onChange={(e) => {
+                const newYear = Number(e.target.value);
+                setSelectedYear(newYear);
+                dispatch(attendanceStudentRecordActions.getAttendanceStudentRecordByMonth(newYear, selectedMonth));
+              }}
+            >
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
                 </option>
               ))}
             </Input>

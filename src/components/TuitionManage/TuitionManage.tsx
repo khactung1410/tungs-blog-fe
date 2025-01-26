@@ -16,19 +16,8 @@ import {
   Table,
 } from 'reactstrap';
 import { studentActions, classActions, attendanceActions, attendanceStudentRecordActions } from '../../redux/actions';
+import { StyledTable, TuitionContainer } from './TuitionManage.styled';
 
-// Styled-components
-const TuitionContainer = styled.div`
-  padding: 20px;
-  margin-left: 250px; //cách lề trái để tránh bị Header che mất.
-`;
-const StyledTable = styled(Table)`
-  border: 0.8px solid #000 !important; /* Tăng độ đậm của viền */
-  th,
-  td {
-    border: 0.8px solid #000 !important; /* Tăng độ đậm viền các ô */
-  }
-`;
 interface FeeResult {
   absenceDates: any;
   student: any; // Thay `any` bằng kiểu chính xác nếu có

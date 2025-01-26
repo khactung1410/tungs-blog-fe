@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   Routes,
   Route,
@@ -67,14 +68,40 @@ const App: React.FC = () => {
     </Router>
   );
 };
+  const Wrapper = styled.div`
+  display: flex;
+  min-height: 100vh;
+  `;
 
+  const SidebarWrapper = styled.div<{ expand: boolean }>`
+  width: ${(props) => (props.expand ? '260px' : '70px')};
+  transition: all 0.25s ease-in-out;
+  background-color: #0e2238;
+  `;
+
+  const MainContent = styled.div`
+  flex: 1;
+  background-color: #fafbfe;
+  padding: 1rem;
+  transition: all 0.35s ease-in-out;
+  `;
 const AppWithHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [expand, setExpand] = useState(true);
+
   return (
-    <>
-      <Header />
-      {children}
-    </>
+    <Wrapper>
+      {/* Chỉ Sidebar và Header phụ thuộc vào `expand` */}
+      <SidebarWrapper expand={expand}>
+        <Header expand={expand} onExpandChange={setExpand} />
+      </SidebarWrapper>
+
+      {/* MainContent không bị re-render khi `expand` thay đổi */}
+      <React.Fragment>
+        <MainContent>{children}</MainContent>
+      </React.Fragment>
+    </Wrapper>
   );
 };
+
 
 export default App;

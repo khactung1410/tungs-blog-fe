@@ -4,7 +4,6 @@ import { Button, Form, FormGroup, Modal, Table } from 'reactstrap';
 
 export const AttendanceContainer = styled.div`
   padding: 20px;
-  margin-left: 250px; //cách lề trái để tránh bị Header che mất.
 `;
 
 export const ActionBar = styled.div`

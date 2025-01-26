@@ -1,40 +1,32 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import my_avatar from '../../images/tung_english_avatar.png';
 
-const styledName = {
-  color: '#27272a',
-  fontWeight: '600',
-  fontSize: '20px',
-  textDecoration: 'none'
-};
+interface MeContainerProps {
+  avatar: string; // URL hoặc đường dẫn tới ảnh avatar
+  text?: string;   // Văn bản hiển thị
+}
 
-const styledRole = {
-  padding: '0 0 4px 8px',
-  color: '#616e7c',
-  fontSize: '15px'
-};
+const MeContainer: React.FC<MeContainerProps> = ({ avatar, text }) => {
 
-const MeContainer: React.FC = () => {
   return (
-    <div style={{ display: 'flex' }}>
-      <a href="/">
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center', // Căn giữa theo chiều dọc
+        gap: '12px', // Khoảng cách giữa avatar và text
+        margin: '12px 6px'
+      }}
+    >
+      <a>
         <img
-          src={my_avatar}
-          alt="Tung Duong Khac"
+          src={avatar}
+          alt="Avatar"
           height="64"
-          width="63"
+          width="64"
           style={{ borderRadius: '50%' }}
           className="avatar"
         />
       </a>
-      <div>
-        <a href="https://www.facebook.com/tienganhmrtung/" style={styledName} target="_blank" rel="noopener noreferrer">
-          Mr.Tung English
-        </a>
-        <div style={styledRole}>English With Joy</div>
-      </div>
+      <div>{text ? text : ''}</div>
     </div>
   );
 };

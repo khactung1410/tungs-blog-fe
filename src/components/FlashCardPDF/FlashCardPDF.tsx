@@ -4,29 +4,12 @@ import { RootState } from '../../redux/reducers';
 import { submitText } from '../../redux/actions';
 import { AppDispatch } from '../../store';
 import { downloadTracingWord, downloadVocabTest } from '../../redux/actions/vocabTest.actions';
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs } from 'react-bootstrap';
 import styled from 'styled-components';
 import Loading from '../../common/Loading/loading';
+import { NumberInput, StyledTab, TabContainer, Title } from './FlashCardPDF.styled';
 
-const TabContainer = styled.div`
-  margin-top: 20px;
-  margin-left: 250px; //cách lề trái để tránh bị Header che mất.
-`;
 
-const Title = styled.p`
-  font-weight: bold;
-  margin-top: 20px;
-`;
-
-const StyledTab = styled(Tab)`
-  &.nav-link {
-    color: #000;
-  }
-`;
-
-const NumberInput = styled.input`
-  width: 80px;
-`;
 
 const FlashCardPDF: React.FC = () => {
   const [text, setText] = useState('');

@@ -8,7 +8,6 @@ import { styled } from 'styled-components';
 
 const TabContainer = styled.div`
   margin-top: 20px;
-  margin-left: 250px; //cách lề trái để tránh bị Header che mất.
 `;
 
 const SignupPage: React.FC = () => {
